@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="aaf91e97-b880-4ddd-8c5c-ce5c023ee8e0" name="Default Changelist" comment="" />
+    <list default="true" id="aaf91e97-b880-4ddd-8c5c-ce5c023ee8e0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vuepress/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/.vuepress/config.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1m6ALthAEFTt24hM5UFPTuETsqk" />
   <component name="ProjectViewState">
@@ -63,6 +70,7 @@
       <updated>1608803615405</updated>
       <workItem from="1608803617042" duration="2622000" />
       <workItem from="1608812185388" duration="3346000" />
+      <workItem from="1608815616646" duration="2565000" />
     </task>
     <servers />
   </component>

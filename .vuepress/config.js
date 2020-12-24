@@ -1,8 +1,9 @@
 module.exports = {
-    title: "小丑不哭",
-    description: "一只前端哈狗的日常",
-    dest: "public",
-    smoothScroll: true,
+    "title": "小丑不哭",
+    "description": "一只前端哈狗的日常",
+    "dest": "public",
+    "base": "/blog/",
+    "smoothScroll": true,
     "head": [
         [
             "link",
