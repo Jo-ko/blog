@@ -4,10 +4,11 @@
   "author": "jooker",
   "scripts": {
     "dev": "vuepress dev . --open --host \"localhost\"",
-    "build": "vuepress build ."
+    "build": "vuepress build .",
+    "deploy-gh": "GH=1 yarn build && bash deploy.sh"
   },
   "devDependencies": {
-    "vuepress": "1.5.4",
+    "vuepress": "^1.7.1",
     "vuepress-theme-reco": "1.5.7"
   },
   "dependencies": {
