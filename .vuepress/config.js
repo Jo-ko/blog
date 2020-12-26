@@ -109,7 +109,8 @@ module.exports = {
             ],
             "/docs/js/": [
                 ["", "简述"],
-                "ecma"
+                "ecma",
+                "dom"
             ],
             "/docs/native/": [
                 ["", "简述"]
