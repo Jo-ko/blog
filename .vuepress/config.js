@@ -1,6 +1,6 @@
 module.exports = {
     "title": "小丑不哭",
-    "description": "一只前端哈狗的日常",
+    "description": "一只前端哈狗的开发日常",
     "dest": "public",
     "base": "/blog/",
     "smoothScroll": true,
@@ -38,8 +38,48 @@ module.exports = {
                 "icon": "reco-message",
                 "items": [
                     {
+                        "text": "计算机基础",
+                        "link": "/docs/computer/"
+                    },
+                    {
+                        "text": "浏览器基础",
+                        "link": "/docs/browser/"
+                    },
+                    {
                         "text": "JS语法基础",
                         "link": "/docs/js/"
+                    },
+                    {
+                        "text": "客户端基础",
+                        "link": "/docs/native/",
+                    },
+                    {
+                        "text": "通用编程基础",
+                        "link": "/docs/general/"
+                    },
+                    {
+                        "text": "后端基础",
+                        "link": "/docs/backEnd/"
+                    },
+                    {
+                        "text": "框架原理",
+                        "link": "/docs/framework/"
+                    },
+                    {
+                        "text": "类库基础",
+                        "link": "/docs/libs/"
+                    },
+                    {
+                        "text": "工程化体系",
+                        "link": "/docs/engineer/"
+                    },
+                    {
+                        "text": "软技能",
+                        "link": "/docs/softSkill/"
+                    },
+                    {
+                        "text": "前沿技术",
+                        "link": "/docs/future/"
                     }
                 ]
             },
@@ -49,14 +89,51 @@ module.exports = {
                 "items": [
                     {
                         "text": "GitHub",
-                        "link": "https://github.com/recoluan",
+                        "link": "https://github.com/Jo-ko",
                         "icon": "reco-github"
+                    },
+                    {
+                        "text": "Twitter",
+                        "link": "https://twitter.com/Jooker18506261",
+                        "icon": "reco-twitter"
                     }
                 ]
             }
         ],
         "sidebar": {
+            "/docs/computer/": [
+                ["", "简述"],
+            ],
+            "/docs/browser/": [
+                ["", "简述"]
+            ],
             "/docs/js/": [
+                ["", "简述"],
+                "ecma"
+            ],
+            "/docs/native/": [
+                ["", "简述"]
+            ],
+            "/docs/general/": [
+                ["", "简述"]
+            ],
+            "/docs/backEnd/": [
+                ["", "简述"]
+            ],
+            "/docs/framework/": [
+                ["", "简述"]
+            ],
+            "/docs/libs/": [
+                ["", "简述"]
+            ],
+            "/docs/engineer/": [
+                ["", "简述"]
+            ],
+            "/docs/softSkill/": [
+                ["", "简述"]
+            ],
+            "/docs/future/": [
+                ["", "简述"]
             ]
         },
         "type": "blog",

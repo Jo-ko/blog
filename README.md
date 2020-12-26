@@ -1,7 +1,7 @@
 ---
 home: true
 heroText: 小丑不哭
-tagline: 一只前端狗的开发日常
+tagline: There is no punchline. It’s not a jok
 # heroImage: /hero.png
 # heroImageStyle: {
 #   maxWidth: '600px',
