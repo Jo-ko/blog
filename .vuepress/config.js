@@ -1,7 +1,7 @@
 module.exports = {
     "title": "小丑不哭",
     "description": "一只前端哈狗的开发日常",
-    "dest": "public",
+    "dest": "dist",
     "base": "/blog/",
     "smoothScroll": true,
     "head": [
