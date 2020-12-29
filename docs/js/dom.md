@@ -1,6 +1,10 @@
 ---
 title: DOM对象
 date: 2020-04-29
+tags:
+- Html
+categories:
+- 前端知识
 ---
 
 ## Node常量类型(可正常使用)

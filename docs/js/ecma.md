@@ -1,6 +1,10 @@
 ---
 title: ECMAScript 版本
 date: 2020-04-29
+tags:
+- JS 
+categories:
+- 前端知识
 ---
 
 ## 重要版本经历

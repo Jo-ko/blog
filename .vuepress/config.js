@@ -103,17 +103,21 @@ module.exports = {
         "sidebar": {
             "/docs/computer/": [
                 ["", "简述"],
+                "compile"
             ],
             "/docs/browser/": [
-                ["", "简述"]
+                ["", "简述"],
+                "tcp",
             ],
             "/docs/js/": [
                 ["", "简述"],
                 "ecma",
-                "dom"
+                "dom",
+                "regExp"
             ],
             "/docs/native/": [
-                ["", "简述"]
+                ["", "简述"],
+                'mini'
             ],
             "/docs/general/": [
                 ["", "简述"]
