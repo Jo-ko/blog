@@ -8,11 +8,49 @@ categories:
 ---
 > 请先确保对正则表达式有足够的理解再看下面的知识点
 
-## 编译的两个阶段
+## 了解编译原理的重要性
+目前无论是前端的框架还是工程化体系,其中依赖的重要技术点就是编译技术,所以了解编译原理对了解现代前端有着重要的意义
+
+## 编译的两个广义阶段
 **对于前端来说,我们需要了解编译的前端部分就足够了**
 1. 源代码的分析理解阶段(前端)
 2. 生成目标代码阶段(后端)
 
-### 源代码的分析理解阶段
-#### 词法分析
+### 源代码的分析理解阶段(前端)
+#### 1. 词法分析
 所谓的词法分析就是将源代码字符串切割成一个个有效的token的过程,通俗讲就是将一串字符串,拆分成一个个字符段
+```js
+const code = `console.log(name)`; 
+const tokenizer = syntaxAnalysis(code); // [tokener('console'), tokener('log'), tokener('('), tokener('name'), tokener(')')]
+```
+整个分词过程就是一个有穷自动机的解析过程:
+1. 一个个读取字符,组成token, 
+2. 利用正则判断token流状态,是合法完整的token状态的话就保存当前token流
+3. 迁移到下一个token
+
+#### 2. 语法分析
+将语法分析生成的字符组转成ast语法树,常用的是递归下降算法
+```js
+const ast = parse(tokenizer);
+// CallExpression
+// - callee: MemberExpression
+//  - object
+//      - type: Identifier
+//      - name: console
+//  - property
+//      - type: Identifier
+//      - name: log
+// - arguments: Identifier
+//      - name: name
+```
+#### 3. 语义分析
+在语法分析的基础上,对该语言的规则做一些校验,比如js的this问题,作用域问题
+
+### babel-parse
+@flowstart
+st=>start: Start
+e=>end: End
+
+st->e
+@flowend
+[estree](https://github.com/estree/estree/blob/master/es5.md)

@@ -4,6 +4,9 @@ module.exports = {
     "dest": "dist",
     "base": "/blog/",
     "smoothScroll": true,
+    'plugins': [
+        'flowchart'
+    ],
     "head": [
         [
             "link",
@@ -129,7 +132,8 @@ module.exports = {
                 ["", "简述"]
             ],
             "/docs/libs/": [
-                ["", "简述"]
+                ["", "简述"],
+                "babel"
             ],
             "/docs/engineer/": [
                 ["", "简述"]
