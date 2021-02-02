@@ -106,7 +106,8 @@ module.exports = {
         "sidebar": {
             "/docs/computer/": [
                 ["", "简述"],
-                "compile"
+                "compile",
+                "algorithm"
             ],
             "/docs/browser/": [
                 ["", "简述"],
