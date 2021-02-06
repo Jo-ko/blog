@@ -107,7 +107,7 @@ module.exports = {
             "/docs/computer/": [
                 ["", "简述"],
                 "compile",
-                "algorithm"
+                "algorithm",
             ],
             "/docs/browser/": [
                 ["", "简述"],
@@ -171,6 +171,7 @@ module.exports = {
             //     "link": "https://vuepress-theme-reco.recoluan.com"
             // }
         ],
+        "subSidebar": "auto",
         "logo": "/logo.png",
         "search": true,
         "searchMaxSuggestions": 10,
