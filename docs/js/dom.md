@@ -195,7 +195,7 @@ document.getElementsByTagName() // 根据元素的标签寻找对应的节点, �
 
 // 注意,querySelector和querySelectorAll返回的是node的快照,这个与之前的获取dom元素的方法不同
 document.querySelector()
-document.querySelectorAll()
+document.querySelectorAll() 
 
 // 查询时候存在某元素, 返回boolean
 document.body.matches()

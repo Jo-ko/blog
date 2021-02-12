@@ -8,7 +8,7 @@ class TreeNode<T> {
     leftNode: TreeNode<T> | null = null;
     rightNode: TreeNode<T> | null = null;
     parentNode: TreeNode<T> | null = null;
-    side: Side;
+    side: Side; // 标识当前的节点的挂载位置
     constructor(value: T) {
         this.value = value;
     }
@@ -107,20 +107,66 @@ class BinaryTree<T> {
                 this.root = target.rightNode;
             }
         } else { // 目标节点有两个子节点
+            // 找到该节点的后继节点
+            // 该后继节点要大于该节点的左子节点,小于该节点的右子节点
+            // 因此我们需要找到该节点的右子节点的最左子节点
+            let nextInheritNode = target.rightNode;
+            while(nextInheritNode && nextInheritNode.leftNode) {
+                nextInheritNode = nextInheritNode.leftNode
+            }
+
+            if (nextInheritNode.side === Side.right) {
+                // 表明这是删除节点的右子节点
+                nextInheritNode.leftNode = target.leftNode;
+                nextInheritNode.leftNode.parentNode = nextInheritNode;
+                nextInheritNode.parentNode = target.parentNode;
+            } else {
+                // 表明这是最左子节点
+                target.leftNode && (target.leftNode.parentNode = nextInheritNode);
+                target.rightNode && (target.rightNode.parentNode = nextInheritNode);
+                nextInheritNode.parentNode.leftNode = nextInheritNode.rightNode;
+                nextInheritNode.rightNode = target.rightNode;
+                nextInheritNode.leftNode = target.leftNode;
+                nextInheritNode.parentNode = target.parentNode;
+            }
+
+
+            // 判断是否是根节点
+            if (target.parentNode) {
+                if (target.side === Side.left) {
+                    target.parentNode.leftNode = nextInheritNode;
+                } else {
+                    target.parentNode.rightNode = nextInheritNode;
+                }
+            } else {
+                this.root = nextInheritNode;
+            }
 
         }
         return false;
+    }
+
+    // 遍历(中序遍历)
+    public static infixOrder(node: TreeNode<any>) {
+        if (node !== null) {
+            BinaryTree.infixOrder(node.leftNode);
+            console.log(node.value);
+            BinaryTree.infixOrder(node.rightNode);
+        }
     }
 }
 
 const binaryTree = new BinaryTree();
 binaryTree.insert(12);
 binaryTree.insert(6);
-binaryTree.insert(13);
+binaryTree.insert(16);
 binaryTree.insert(4);
 binaryTree.insert(14);
+binaryTree.insert(15);
+binaryTree.insert(17);
+binaryTree.insert(18);
 
-// binaryTree.remove(4)
-console.log(binaryTree);
+binaryTree.remove(16);
 
-// https://zhuanlan.zhihu.com/p/37470148
+BinaryTree.infixOrder(binaryTree.root);
+
