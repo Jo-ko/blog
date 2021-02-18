@@ -299,11 +299,23 @@ cond(yes)->process1->e2
 
 
 ### 红黑树
-> 2-3-4树的变体
+> 本质是2-3-4树的变体
 
-1. 满足二叉搜索树的基本特性
-2. 节点是红色或黑色
-3. 根节点是黑色
-4. 每个叶子节点都是黑色的空节点(null)
-5. 每个红色节点的子节点都是黑色节点,也就是不能出现连续的红色节点
-6. 从任一节点(包括根节点)到其每个叶子的所有路径都包含相同数目的黑色节点。
+#### 2-3-4树和红黑树对比
+| 节点状态 |    2-3-4树    | 红黑树 |
+| :------: | :----------: | :---: |
+| 2节点 | ![](http://img.souche.com/f2e/764e6b2bd17860ae114344e387bdff92.png) |  ![](http://img.souche.com/f2e/edac474e096930a4f9e6a1d632f341ca.png) |
+| 3节点 | ![](http://img.souche.com/f2e/edd391783fad5531f05974eeee610ff2.png) |  ![](http://img.souche.com/f2e/66b4f123cc18acd0dcc634dab25c4c10.png) |
+| 4节点 | ![](http://img.souche.com/f2e/9c83f608692bdabc9d1eec7f8448073d.png) |  ![](http://img.souche.com/f2e/8240cffdc43c31873f303e7e184f16c2.png) |
+| 过度节点 | ![](http://img.souche.com/f2e/6aeda6b09ffc6cb1e45e6c9f4c04a25e.png) |  ![](http://img.souche.com/f2e/073c97f195a494a8fc61b75964ffe8a4.png) |
+
+**按照表格将上面的2-3-4树转成红黑树**
+
+![](http://img.souche.com/f2e/38ed942caa73c2ef54b18d93e96fc63a.png)
+
+#### 红黑树五大性质
+1. 节点是红色或黑色
+2. 根节点是黑色
+3. 每个叶子节点都是黑色的空节点(null)
+4. 每个红色节点的子节点都是黑色节点,也就是不能出现连续的红色节点
+5. 从任一节点(包括根节点)到其每个叶子的所有路径都包含相同数目的黑色节点。
