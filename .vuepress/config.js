@@ -108,6 +108,7 @@ module.exports = {
                 ["", "简述"],
                 "compile",
                 "algorithm",
+                "network"
             ],
             "/docs/browser/": [
                 ["", "简述"],
