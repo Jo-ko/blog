@@ -112,7 +112,9 @@ module.exports = {
             ],
             "/docs/browser/": [
                 ["", "简述"],
-                "tcp",
+                "v8",
+                "crossOrigin",
+                "request"
             ],
             "/docs/js/": [
                 ["", "简述"],
