@@ -54,6 +54,7 @@ categories:
 const xhr = new XMLHttpRequest();
 xhr.withCredentials = true;
 ```
+**设置跨域认证信息的时候,后端的Access-Control-Allow-Origin不能为* **
 
 ### 2. JSONP
 > JSONP不是新协议,只支持get方法
