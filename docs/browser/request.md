@@ -383,5 +383,60 @@ const response = await fetch('/users', {
 ```
 :::
 
+## 浏览器缓存
+### 整体流程
+@flowstart
+st=>start: GET /index.html
+hasCache=>condition: 是否使用缓存?
+hasStrongCache=>condition: 强缓存是否过期?
+negotiateCache=>condition: 协商缓存是否过期?
+serverReturn=>operation: 服务器获取内容
+304=>parallel: 返回304
+cacheReturn=>operation: 返回本地缓存
+e=>end: 返回结果 index.html
+
+st->hasCache
+hasCache(no)->serverReturn
+hasCache(yes)->hasStrongCache
+hasStrongCache(yes)->cacheReturn
+hasStrongCache(no)->negotiateCache
+negotiateCache(yes)->304
+304(path1, left)->cacheReturn
+negotiateCache(no)->serverReturn
+cacheReturn->e
+serverReturn->e
+@flowend
+
+### 是否使用缓存?
+**满足下面条件中的一条,直接请求服务器资源**
+1. 第一次请求资源
+2. head字段中的Cache-Control为no-store
+
+### 强缓存
+#### 相关header
+::: tip Cache-Control 
+用于控制缓存行为,__优先级最高__
+
+|字段名|描述|
+|:---:|:---:|
+|public|表示可以被缓存|
+|private|表示本地服务器可以缓存, 代理服务器不能被共享|
+|no-store|不允许缓存,包括强缓存和协商缓存|
+|no-cache|客户端缓存内容,单使用内容需要服务端协商验证|
+|max-age|设置缓存的最大周期时间,类似Expires, 但这个时间是相对于请求时间|
+|s-maxage|会覆盖max-age和Expires, 但仅适用共享缓存|
+|max-stable|表明客户端愿意接收一个已经过期的资源,设置的时间表示响应时间|
+|min-fresh|告知服务器,客户端希望接收一个在小于该时间的被更新过的资源|
+|must-revalidation|一旦资源过期(比如已经超过max-age),在成功向原始服务器验证之前,缓存不能用该资源,请求失败会返回504|
+|proxy-revalidation|和must-revalidation类似,但只能用于共享资源|
+|only-if-cached|客户端只接收已经缓存的响应,但不用向服务器验证资源是否更新|
+|no-transform|不允许对资源进行转换|
+:::
+
+::: tip  Expires
+1. 控制缓存过期时间
+2. 请求头携带if-Last-modified时,服务端响应头携带改信息和Last-modified
+3. HTTP 1.0产物,受制于浏览器本地时间,本地时间修改会导致资源过期
+:::   
 
 [comment]: <> (https://segmentfault.com/a/1190000004322487)
