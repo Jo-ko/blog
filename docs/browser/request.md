@@ -207,10 +207,181 @@ function progressHandle(event) {
 |onerror|请求过程中发生传输层以下的network error时触发(如果此时还未上传结束,则先触发xhr.upload.onerror事件)|
 
 #### 事件触发顺序
+::: tip 请求成功
+1. xhr.onreadystatechange触发,xhr.readystate=0
+2. xhr.onloadstart触发 xhr.readystate=1
+3. 如果有上传阶段 
+   - xhr.upload.onloadstart
+   - xhr.upload.onprogress
+   - xhr.upload.onload
+   - xhr.upload.onloadend; xhr.readystate=2
+4. xhr.onprogress; xhr.readystate=3
+5. xhr.onload; xhr.readystate=4
+6. xhr.onloadend
+:::
+   
+::: tip 请求中断(abort/timeout/net error)
+1. 发生abort/timeout/error事件后, 立即终止当前请求
+2. 触发xhr.onreadystatechange事件 xhr.readystate=4
+3. 上传阶段未结束
+   - xhr.upload.onprogress
+   - xhr.upload[onabort/ontimeout/onerror]
+   - xhr.upload.onloadend
+4. xhr.onprogress
+5. xhr[onabort/ontimeout/onerror]
+6. xhr.onloadend
+:::
 
+### 选择onload还是onreadystatechange的status===4
+- 在上面的请求过程中我们知道onreadystatechange无法区分abort/timeout/error的事件(readystatus都是4)
+- 所以当我们需要针对abort/timeout/error做事件监听的时候,请使用onload
 
+## Fetch
+> 升级版XMLHttpRequest
 
+### 与XMLHttpRequest的区别
+1. fetch使用Promise写法,XHR使用回调函数的写法
+2. fetch采用模块化的结构, api在不同的模块上
+3. fetch通过数据流的方式处理数据,支持分块读取,XHR必须等到数据完全返回才能读取
 
-### onload和xhr.readyState === 4
+### 基本使用
+```js
+const option: Option = {};
+fetch('https://localhost:8080/api/name', option)
+    .then((response: Response) => response.json())
+    .then(json => console.log(json))
+    .catch(err => console.error('Request error %s', err))
+```
+
+### Response对象
+```ts
+enum ResponseType {
+   basic, // 同源请求
+   cors, // 跨域请求
+   error, // 传输层网络层错误
+   opaque, // 
+   opaqueredirect,
+}
+
+interface Response {
+    ok: boolean; // true表示对应的Http状态码是200-299, false表示其他状态码
+    status: number; // Http状态码
+    statusText: string; // Http返回的状态信息
+    url: string; // 请求的url, 如果是重定向就是重定向后的页面
+    type: ResponseType;
+    redirected: boolean; // 表示是否发生重定向
+    headers: Headers; // HTTP响应的head头
+    // 读取内容的方法, 注意下面方法只能执行一次, 通过clone方法解决
+    text: () => Promise<string>; // 得到文本字符串
+    json: () => Promise<JSON>; // 得到JSON对象
+    blob: () => Promise<Blob>; // 得到二进制Blob对象
+    formData: () => Promise<FormData>; // 得到FormData表单
+    clone: () => Response; // 克隆当前Response对象
+    body: ReadableStream; // 底层接口,当前返回的Response数据块
+}
+```
+
+### Option对象
+> option对象用于订制Http请求
+
+```ts
+interface Option {
+    method: string; // 方法
+    headers: Object; // 头信息
+    body: any; // 数据包体
+    referrer: string; // referrer标头 
+    referrerPolicy: string; // 发送referrer规则
+    mode: string; // 模式,跨域or同域
+    credentials: string; // 发送带凭证请求
+    cache: string; // 缓存策略
+    redirect: string; // HTTP跳转处理方式
+    integrity: string; // 指定哈希值,用于检查HTTP传回的数据是否等于这预先设定的哈希值
+    keepalive: boolean; // 当页面关闭的时候,或者处于静默状态,高速浏览器在后台保持连接
+    signal: AbortSignal; // AbortSignal实例,用于取消请求
+}
+```
+
+#### cache
+1. default: 默认值, 现在缓存里面寻找匹配的请求
+2. no-store: 直接请求远程服务器,并且不更新缓存
+3. reload: 直接请求远程服务器,并且更新缓存
+4. no-cache: 将服务器更本地缓存进行比较,有新的才使用服务器资源,否则使用缓存
+5. force-cache: 缓存优先,只有不存在缓存的情况下,才会请求远程服务器
+6. only-if-cached: 只检查缓存,如果缓存不存在,将返回504错误
+
+#### mode
+1. cors: 默认值, 允许跨源请求
+2. same-origin: 只允许同源请求
+3. no-cors: 请求方法只能使用GET, POST和HEAD,不能添加复杂的头信息
+
+#### credentials
+1. same-origin: 默认值同源请求发送cookie,跨域请求不发送
+2. include; 一律发送Cookie
+3, omit: 一律不发送
+   
+#### signal
+用于取消fetch请求
+
+```js
+const controller = new AbortController();
+const signal = controller.signal;
+
+fetch(url, {
+    signal: signal
+})
+
+signal.addEventListener('abort', () => {
+    console.log('abort')
+})
+
+controller.abort(); // 发出取消信号
+
+console.log(signal.aborted) // true
+```
+
+#### redirect
+> 重定向规则
+1. follow: 默认值,自动跳转
+2. error: 如果发生跳转,fetch就报错
+
+::: tip Post请求
+我们需要手动设置content-type的值,由于数据类型是字符,所以默认的content-type是text/plain
+```ts
+const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: 'name=jooker&age=12'
+        }
+)
+```
+:::
+
+::: tip JSON数据
+我们需要手动设置content-type的值,由于数据类型是字符,所以默认的content-type是text/plain
+```js
+const user =  { name:  'John', surname:  'Smith'  };
+const response = await fetch('/article/fetch/post/user', {
+  method: 'POST',
+  headers: {
+   'Content-Type': 'application/json;charset=utf-8'
+  }, 
+  body: JSON.stringify(user) 
+});
+```
+:::
+
+::: tip 提交表单
+不需要手动设置content-type
+```js
+const formData = new FormData();
+const response = await fetch('/users', {
+    method: 'POST',
+    body: formData
+})
+```
+:::
+
 
 [comment]: <> (https://segmentfault.com/a/1190000004322487)
