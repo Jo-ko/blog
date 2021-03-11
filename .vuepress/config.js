@@ -114,7 +114,8 @@ module.exports = {
                 ["", "简述"],
                 "v8",
                 "crossOrigin",
-                "request"
+                "request",
+                "cache"
             ],
             "/docs/js/": [
                 ["", "简述"],
