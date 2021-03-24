@@ -135,7 +135,8 @@ module.exports = {
                 ["", "简述"]
             ],
             "/docs/framework/": [
-                ["", "简述"]
+                ["", "简述"],
+                "react"
             ],
             "/docs/libs/": [
                 ["", "简述"],
