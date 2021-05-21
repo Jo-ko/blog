@@ -164,7 +164,7 @@ domOB.takeRecords();
 - nextSibling: 对于"childList"类型的变化，返回变化节点的后一个兄弟 Node
 
 ##### 应用场景
-用于执行微队列任务
+1. 用于执行微队列任务
 ```js
 function flushCallbacks () {
    pending = false
@@ -184,6 +184,7 @@ timerFunc = () => {
  textNode.data = String(counter)
 }
 ```
+2. 用于性能检测
 ## 元素获取
 
 ```js

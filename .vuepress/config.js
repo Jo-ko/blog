@@ -136,14 +136,17 @@ module.exports = {
             ],
             "/docs/framework/": [
                 ["", "简述"],
-                "react"
+                "react",
+                "react-origin"
             ],
             "/docs/libs/": [
                 ["", "简述"],
                 "babel"
             ],
             "/docs/engineer/": [
-                ["", "简述"]
+                ["", "简述"],
+                "bundler",
+                "workingFlow"
             ],
             "/docs/softSkill/": [
                 ["", "简述"]
