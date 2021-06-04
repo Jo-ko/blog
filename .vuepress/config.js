@@ -4,9 +4,20 @@ module.exports = {
     "dest": "dist",
     "base": "/blog/",
     "smoothScroll": true,
+    "port": 8000,
     'plugins': [
-        'flowchart'
+        'flowchart',
+        '@vuepress-reco/extract-code'
     ],
+    "theme": 'reco',
+    "themeConfig": {
+        // 密钥
+        keyPage: {
+          keys: ['3c07c009b7b52fcc5a72368896cb59fa'], // 1.3.0 版本后需要设置为密文
+          color: '#42b983', // 登录页动画球的颜色
+          lineColor: '#42b983' // 登录页动画线的颜色
+        }
+     },
     "head": [
         [
             "link",

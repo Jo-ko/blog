@@ -200,26 +200,34 @@ export default function App() {
 ### Reconciler(协调器)
 > 通过Fiber架构和Schedule机制实现组件更新挂载任务,避免了Reconciler和Render交替执行的时间占用过大
 
-::: tip Reconciler在Fiber架构下分成两个阶段**
-#### 1. 调度阶段(reconciliation): 通过启发式diff算法找出需要更新的节点,并打上标记(我们称之为副作用effect),该阶段可以被中断
+Reconciler在Fiber架构下分成两个阶段
+::: tip 1. 调度阶段(reconciliation)
+在render|setState|forceUpdate触发,通过启发式diff算法找出需要更新的节点,并打上标记(我们称之为副作用effect),该阶段可以被中断
 
-1. diff对比找出Fiber节点需要更新的部分,生成新的Fiber树并保存EffectList 
-2. 计算任务的expriationTime(当前时间点 + 优先级常量)
+
+<RecoDemo :collapse="true">
+  <template slot="code-js">
+    <<< @/docs/framework/code/react_reconciler_setState/enqueueSetState.js
+  </template>
+</RecoDemo>
+
+2. diff对比找出Fiber节点需要更新的部分,生成新的Fiber树并保存EffectList
+3. 计算任务的expriationTime(当前时间点 + 优先级常量)
      1. [获取当前渲染时间点(终点常量时间 - 渲染经历时间)](https://github.com/facebook/react/blob/487f4bf2ee7c86176637544c5473328f96ca0ba2/packages/react-reconciler/src/ReactFiberScheduler.js#L1948)
      2. 获取当前任务的[优先级(同步, 交互, 异步, 空闲)](https://github.com/facebook/react/blob/487f4bf2ee7c86176637544c5473328f96ca0ba2/packages/scheduler/src/Scheduler.js#L433)
      3. 根据当前时间点和优先级常量获取过期时间,并通过[ceiling函数](https://github.com/facebook/react/blob/487f4bf2ee7c86176637544c5473328f96ca0ba2/packages/react-reconciler/src/ReactFiberExpirationTime.js#L31)抹平了一段时间的时间差,优化了渲染性能
-3. 创建任务的Update, 并推入[UpdateQueue](https://github.com/facebook/react/blob/487f4bf2ee7c86176637544c5473328f96ca0ba2/packages/react-reconciler/src/ReactUpdateQueue.js#L220)中
+4. 创建任务的Update, 并推入[UpdateQueue](https://github.com/facebook/react/blob/487f4bf2ee7c86176637544c5473328f96ca0ba2/packages/react-reconciler/src/ReactUpdateQueue.js#L220)中
      1. updateQueue分为current queue(queue1)、work-in-progress queue(queue2) 两个队列
      2. 如果两者均为null，则调用createUpdateQueue()获取初始队列
      3. 如果两者之一为null，则调用cloneUpdateQueue()从对方中获取队列
      4. 如果两者均不为null，则将update作为lastUpdate
-4. 如果使用了useEffect(在早期16版本中没有)
+5. 如果使用了useEffect(在早期16版本中没有)
       1. 调用该useEffect在上一次render时的销毁函数
       2. 调用该useEffect在本次render时的回调函数
-5. 开启ScheduleWork调度, 遇到超时或者有更高优先级任务时会挂起退出
-6. 每次调度之前,判断当前任务是否过期, 过期就直接调用port.postMessage(undefined),会在下次渲染之前执行任务
-7. 没有过期,就调用RequestAnimationFrame,让任务在重绘前调用
-8.  有些任务被打断并恢复执行时,会造成一些生命周期被多次调用, 不要在这些生命周期执行一些带有副作用的操作(包括操作dom, setState和调用Ajax)
+6. 开启ScheduleWork调度, 遇到超时或者有更高优先级任务时会挂起退出
+7. 每次调度之前,判断当前任务是否过期, 过期就直接调用port.postMessage(undefined),会在下次渲染之前执行任务
+8. 没有过期,就调用RequestAnimationFrame,让任务在重绘前调用
+9.  有些任务被打断并恢复执行时,会造成一些生命周期被多次调用, 不要在这些生命周期执行一些带有副作用的操作(包括操作dom, setState和调用Ajax)
        1. constructor
        2. componentWillMount,
        3. componentWillReceiveProps,
@@ -227,7 +235,7 @@ export default function App() {
        5. shouldComponentUpdate,
        6. componentWillUpdate,
        7. render
-9. 该阶段对于用户是没有副作用(DOM更新等)的
+10. 该阶段对于用户是没有副作用(DOM更新等)的
 
 #### 2. 渲染阶段(commit): 将调度阶段需要处理的副作用一次性执行,该阶段不可调度不可中断
 该阶段是将调度阶段生成的effectList应用到真实节点中
@@ -240,7 +248,7 @@ export default function App() {
 ::: tip Schedule Work
 前期版本
 1. 找到FiberRoot并返回,同时设置节点的expirationTime和childExpirationTime为该update的expirationTime(如果这两个属性的时间小于update的时间)
-2. [如果优先级高,会打断之前的任务](https://github.com/facebook/react/blob/487f4bf2ee7c86176637544c5473328f96ca0ba2/packages/react-reconciler/src/ReactFiberScheduler.js#L1873)
+2. [如果新任务优先级高,会打断之前的任务](https://github.com/facebook/react/blob/487f4bf2ee7c86176637544c5473328f96ca0ba2/packages/react-reconciler/src/ReactFiberScheduler.js#L1873)
    1. 没有任务执行(调度交给了浏览器)
    2. 存在任务未执行完成(比如异步任务)
    3. 新任务的过期时间小于之前的任务
@@ -248,7 +256,7 @@ export default function App() {
    1. 将当前的root加入到ScheduleRoot的单向循环链表
       1. 通过root.nextScheduledRoot判断当前的root是否已经进入调度阶段
       2. root.nextScheduledRoot == null 表示还没有进入调度
-         1. 如果lastScheduledRoot不存在,说明当前没有要处理的root, 这时候就把 firstScheduleRoot、lastScheduleRoot、root.nextScheduleRoot都设置为root __(形成首尾相连的单向循环链表 A->A)__
+         1. 如果lastScheduledRoot不存在,说明当前没有要处理的root, 这时候就把 firstScheduleRoot、lastScheduleRoot、root.nextScheduleRoot都赋值为root __(形成首尾相连的单向循环链表 A->A)__
          2. 如果lastScheduledRoot存在,就把当前root插入到ScheduleRoot链表末尾 __(A->B->A)__
       3. root.nextScheduledRoot != null 表示已经进入了调度, 并设置当前root的最高优先级
     2. 判断三个环境
@@ -256,9 +264,12 @@ export default function App() {
        2. 如果是已经开始批处理
           1. 是首次渲染,会调用performWorkOnRoot立即更新
           2. 不是首次渲染,也会直接返回
-       3. 当expirationTime时同步的时候,会调用performSyncWork立即执行
-       4. 其余的走scheduleCallbackWithExpirationTime调度
+       3. 当expirationTime为同步的时候,会调用performSyncWork立即执行(这种情况相对常见)
+       4. 其余的走scheduleCallbackWithExpirationTime调度(该函数可以看成requestIdleCallback的polyfill版本)
+             1. [调用cancelDeferredCallBack取消之前的任务](https://github.com/facebook/react/blob/487f4bf2ee7c86176637544c5473328f96ca0ba2/packages/react-reconciler/src/ReactFiberScheduler.js#L1966)
+             2. 计算timeout(当前的任务的延迟过期时间),[执行scheduleDeferredCallback](https://github.com/facebook/react/blob/487f4bf2ee7c86176637544c5473328f96ca0ba2/packages/scheduler/src/Scheduler.js#L317)
 :::
+
 
 ::: tip 如何在Reconciler层中断任务
 将原来的递归调用改成了while循环,关键是shouldYield这个函数判断了剩余可执行时间
