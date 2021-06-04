@@ -1169,29 +1169,12 @@
   optionalDependencies:
     prettier "^1.18.2"
 
-"@vue/composition-api@^1.0.0-beta.20":
-  version "1.0.0-rc.10"
-  resolved "http://registry.npm.souche-inc.com/@vue/composition-api/download/@vue/composition-api-1.0.0-rc.10.tgz#a98e2b810613531bbbbd3b4c0a9fc46198cc931d"
-  integrity sha1-qY4rgQYTUxu7vTtMCp/EYZjMkx0=
-  dependencies:
-    tslib "^2.2.0"
-
-"@vuepress-reco/core@^1.6.2":
-  version "1.6.2"
-  resolved "http://registry.npm.souche-inc.com/@vuepress-reco/core/download/@vuepress-reco/core-1.6.2.tgz#b6dcd2f7a4b71b57f06857fe183af6ff0663c8b1"
-  integrity sha1-ttzS96S3G1fwaFf+GDr2/wZjyLE=
-  dependencies:
-    "@vue/composition-api" "^1.0.0-beta.20"
-    vue "^2.6.12"
-    vue-demi "^0.5.3"
-    vue-property-decorator "^9.1.2"
-
-"@vuepress-reco/vuepress-plugin-back-to-top@^1.6.0":
+"@vuepress-reco/vuepress-plugin-back-to-top@^1.5.7":
   version "1.6.0"
   resolved "http://registry.npm.souche-inc.com/@vuepress-reco/vuepress-plugin-back-to-top/download/@vuepress-reco/vuepress-plugin-back-to-top-1.6.0.tgz#16cf1a6844f156c11d5135c646270c6734263eb6"
   integrity sha1-Fs8aaETxVsEdUTXGRicMZzQmPrY=
 
-"@vuepress-reco/vuepress-plugin-comments@^1.6.0":
+"@vuepress-reco/vuepress-plugin-comments@^1.5.7":
   version "1.6.0"
   resolved "http://registry.npm.souche-inc.com/@vuepress-reco/vuepress-plugin-comments/download/@vuepress-reco/vuepress-plugin-comments-1.6.0.tgz#df9fb43ce032d429b4c6defcaef461420593f69f"
   integrity sha1-35+0POAy1Cm0xt78rvRhQgWT9p8=
@@ -1209,28 +1192,28 @@
   resolved "http://registry.npm.souche-inc.com/@vuepress-reco/vuepress-plugin-extract-code/download/@vuepress-reco/vuepress-plugin-extract-code-1.0.4.tgz#c50b521d8a5d1c9dfd705e245a7e920a80315a32"
   integrity sha1-xQtSHYpdHJ39cF4kWn6SCoAxWjI=
 
-"@vuepress-reco/vuepress-plugin-loading-page@^1.6.0":
+"@vuepress-reco/vuepress-plugin-loading-page@^1.5.7":
   version "1.6.0"
   resolved "http://registry.npm.souche-inc.com/@vuepress-reco/vuepress-plugin-loading-page/download/@vuepress-reco/vuepress-plugin-loading-page-1.6.0.tgz#34b72ed342dc9b15021d077ff8faeafe52146159"
   integrity sha1-NLcu00LcmxUCHQd/+Prq/lIUYVk=
 
-"@vuepress-reco/vuepress-plugin-pagation@^1.6.0":
+"@vuepress-reco/vuepress-plugin-pagation@^1.5.7":
   version "1.6.0"
   resolved "http://registry.npm.souche-inc.com/@vuepress-reco/vuepress-plugin-pagation/download/@vuepress-reco/vuepress-plugin-pagation-1.6.0.tgz#c632aae1638ff9c67fe58c39ab617132be9eeecb"
   integrity sha1-xjKq4WOP+cZ/5Yw5q2FxMr6e7ss=
 
-"@vuepress/core@1.7.1":
-  version "1.7.1"
-  resolved "http://registry.npm.souche-inc.com/@vuepress/core/download/@vuepress/core-1.7.1.tgz#e92faad0e9445fdd775f8e0d65e927bc35e80571"
-  integrity sha1-6S+q0OlEX913X44NZeknvDXoBXE=
+"@vuepress/core@1.8.2":
+  version "1.8.2"
+  resolved "http://registry.npm.souche-inc.com/@vuepress/core/download/@vuepress/core-1.8.2.tgz#4f5bafc894691bfea4146294a582a129483daf2a"
+  integrity sha1-T1uvyJRpG/6kFGKUpYKhKUg9ryo=
   dependencies:
     "@babel/core" "^7.8.4"
     "@vue/babel-preset-app" "^4.1.2"
-    "@vuepress/markdown" "1.7.1"
-    "@vuepress/markdown-loader" "1.7.1"
-    "@vuepress/plugin-last-updated" "1.7.1"
-    "@vuepress/plugin-register-components" "1.7.1"
-    "@vuepress/shared-utils" "1.7.1"
+    "@vuepress/markdown" "1.8.2"
+    "@vuepress/markdown-loader" "1.8.2"
+    "@vuepress/plugin-last-updated" "1.8.2"
+    "@vuepress/plugin-register-components" "1.8.2"
+    "@vuepress/shared-utils" "1.8.2"
     autoprefixer "^9.5.1"
     babel-loader "^8.0.4"
     cache-loader "^3.0.0"
@@ -1263,21 +1246,21 @@
     webpack-merge "^4.1.2"
     webpackbar "3.2.0"
 
-"@vuepress/markdown-loader@1.7.1":
-  version "1.7.1"
-  resolved "http://registry.npm.souche-inc.com/@vuepress/markdown-loader/download/@vuepress/markdown-loader-1.7.1.tgz#f3ab20965d5dec6e2fc2d11c78ef1a9f08d62f72"
-  integrity sha1-86sgll1d7G4vwtEceO8anwjWL3I=
+"@vuepress/markdown-loader@1.8.2":
+  version "1.8.2"
+  resolved "http://registry.npm.souche-inc.com/@vuepress/markdown-loader/download/@vuepress/markdown-loader-1.8.2.tgz#b2a58291a967f2bbe0af6e58f9542f5911879233"
+  integrity sha1-sqWCkaln8rvgr25Y+VQvWRGHkjM=
   dependencies:
-    "@vuepress/markdown" "1.7.1"
+    "@vuepress/markdown" "1.8.2"
     loader-utils "^1.1.0"
     lru-cache "^5.1.1"
 
-"@vuepress/markdown@1.7.1":
-  version "1.7.1"
-  resolved "http://registry.npm.souche-inc.com/@vuepress/markdown/download/@vuepress/markdown-1.7.1.tgz#56f60c2362fd82b8f2702eefa366c0d5b02fdcbd"
-  integrity sha1-VvYMI2L9grjycC7vo2bA1bAv3L0=
+"@vuepress/markdown@1.8.2":
+  version "1.8.2"
+  resolved "http://registry.npm.souche-inc.com/@vuepress/markdown/download/@vuepress/markdown-1.8.2.tgz#50ea5a1962591a436b26d1aa2b111df37eb9ea8a"
+  integrity sha1-UOpaGWJZGkNrJtGqKxEd83656oo=
   dependencies:
-    "@vuepress/shared-utils" "1.7.1"
+    "@vuepress/shared-utils" "1.8.2"
     markdown-it "^8.4.1"
     markdown-it-anchor "^5.0.2"
     markdown-it-chain "^1.3.0"
@@ -1285,10 +1268,10 @@
     markdown-it-table-of-contents "^0.4.0"
     prismjs "^1.13.0"
 
-"@vuepress/plugin-active-header-links@1.7.1":
-  version "1.7.1"
-  resolved "http://registry.npm.souche-inc.com/@vuepress/plugin-active-header-links/download/@vuepress/plugin-active-header-links-1.7.1.tgz#5a16281bebb977fc1c2b93d992b1a3b7ff840641"
-  integrity sha1-WhYoG+u5d/wcK5PZkrGjt/+EBkE=
+"@vuepress/plugin-active-header-links@1.8.2":
+  version "1.8.2"
+  resolved "http://registry.npm.souche-inc.com/@vuepress/plugin-active-header-links/download/@vuepress/plugin-active-header-links-1.8.2.tgz#0cb9b29c826dd97d35357a9b09c962ef782cb793"
+  integrity sha1-DLmynIJt2X01NXqbCcli73gst5M=
   dependencies:
     lodash.debounce "^4.0.8"
 
@@ -1306,10 +1289,10 @@
     vuepress-plugin-mailchimp "^1.4.1"
     vuepress-plugin-sitemap "^2.3.1"
 
-"@vuepress/plugin-last-updated@1.7.1":
-  version "1.7.1"
-  resolved "http://registry.npm.souche-inc.com/@vuepress/plugin-last-updated/download/@vuepress/plugin-last-updated-1.7.1.tgz#668c55daa6b8bc1d8ee42cdb4169cf67c01b6e97"
-  integrity sha1-ZoxV2qa4vB2O5CzbQWnPZ8Abbpc=
+"@vuepress/plugin-last-updated@1.8.2":
+  version "1.8.2"
+  resolved "http://registry.npm.souche-inc.com/@vuepress/plugin-last-updated/download/@vuepress/plugin-last-updated-1.8.2.tgz#7ce689f8d5050cf0213949bc2e5aa879c09ff4b1"
+  integrity sha1-fOaJ+NUFDPAhOUm8LlqoecCf9LE=
   dependencies:
     cross-spawn "^6.0.5"
 
@@ -1320,26 +1303,41 @@
   dependencies:
     medium-zoom "^1.0.4"
 
-"@vuepress/plugin-nprogress@1.7.1":
-  version "1.7.1"
-  resolved "http://registry.npm.souche-inc.com/@vuepress/plugin-nprogress/download/@vuepress/plugin-nprogress-1.7.1.tgz#101ebf720eaa635a473e16ca16e7b4a7850331fa"
-  integrity sha1-EB6/cg6qY1pHPhbKFue0p4UDMfo=
+"@vuepress/plugin-nprogress@1.8.2":
+  version "1.8.2"
+  resolved "http://registry.npm.souche-inc.com/@vuepress/plugin-nprogress/download/@vuepress/plugin-nprogress-1.8.2.tgz#dc6c082925420c8c59ecb7fc2d4a9401f6d4664a"
+  integrity sha1-3GwIKSVCDIxZ7Lf8LUqUAfbUZko=
   dependencies:
     nprogress "^0.2.0"
 
-"@vuepress/plugin-register-components@1.7.1":
-  version "1.7.1"
-  resolved "http://registry.npm.souche-inc.com/@vuepress/plugin-register-components/download/@vuepress/plugin-register-components-1.7.1.tgz#1ff58e931e8c27d64f9b86f2df879ddaceccdebe"
-  integrity sha1-H/WOkx6MJ9ZPm4by34ed2s7M3r4=
+"@vuepress/plugin-register-components@1.8.2":
+  version "1.8.2"
+  resolved "http://registry.npm.souche-inc.com/@vuepress/plugin-register-components/download/@vuepress/plugin-register-components-1.8.2.tgz#2fb45a68b0a1efb8822670d95c3b231a2d0eb74d"
+  integrity sha1-L7RaaLCh77iCJnDZXDsjGi0Ot00=
   dependencies:
-    "@vuepress/shared-utils" "1.7.1"
+    "@vuepress/shared-utils" "1.8.2"
 
-"@vuepress/plugin-search@1.7.1":
-  version "1.7.1"
-  resolved "http://registry.npm.souche-inc.com/@vuepress/plugin-search/download/@vuepress/plugin-search-1.7.1.tgz#f52b6e77af30f452213bc677741cefe8a8309be2"
-  integrity sha1-9Stud68w9FIhO8Z3dBzv6Kgwm+I=
+"@vuepress/plugin-search@1.8.2":
+  version "1.8.2"
+  resolved "http://registry.npm.souche-inc.com/@vuepress/plugin-search/download/@vuepress/plugin-search-1.8.2.tgz#74b92f663acf6b4560e15dc0442a84c4e874e206"
+  integrity sha1-dLkvZjrPa0Vg4V3ARCqExOh04gY=
 
-"@vuepress/shared-utils@1.7.1", "@vuepress/shared-utils@^1.2.0":
+"@vuepress/shared-utils@1.8.2":
+  version "1.8.2"
+  resolved "http://registry.npm.souche-inc.com/@vuepress/shared-utils/download/@vuepress/shared-utils-1.8.2.tgz#5ec1601f2196aca34ad82eed7c9be2d7948f705b"
+  integrity sha1-XsFgHyGWrKNK2C7tfJvi15SPcFs=
+  dependencies:
+    chalk "^2.3.2"
+    escape-html "^1.0.3"
+    fs-extra "^7.0.1"
+    globby "^9.2.0"
+    gray-matter "^4.0.1"
+    hash-sum "^1.0.2"
+    semver "^6.0.0"
+    toml "^3.0.0"
+    upath "^1.1.0"
+
+"@vuepress/shared-utils@^1.2.0":
   version "1.7.1"
   resolved "http://registry.npm.souche-inc.com/@vuepress/shared-utils/download/@vuepress/shared-utils-1.7.1.tgz#028bc6003247bb4c60cdc96f231eecfb55e7b85d"
   integrity sha1-AovGADJHu0xgzclvIx7s+1XnuF0=
@@ -1354,14 +1352,14 @@
     toml "^3.0.0"
     upath "^1.1.0"
 
-"@vuepress/theme-default@1.7.1":
-  version "1.7.1"
-  resolved "http://registry.npm.souche-inc.com/@vuepress/theme-default/download/@vuepress/theme-default-1.7.1.tgz#36fee5bb5165798c0082c512cbf4d94352260d97"
-  integrity sha1-Nv7lu1FleYwAgsUSy/TZQ1ImDZc=
+"@vuepress/theme-default@1.8.2":
+  version "1.8.2"
+  resolved "http://registry.npm.souche-inc.com/@vuepress/theme-default/download/@vuepress/theme-default-1.8.2.tgz#7f474036c752c1f9801b83f68f5c70c092b182b4"
+  integrity sha1-f0dANsdSwfmAG4P2j1xwwJKxgrQ=
   dependencies:
-    "@vuepress/plugin-active-header-links" "1.7.1"
-    "@vuepress/plugin-nprogress" "1.7.1"
-    "@vuepress/plugin-search" "1.7.1"
+    "@vuepress/plugin-active-header-links" "1.8.2"
+    "@vuepress/plugin-nprogress" "1.8.2"
+    "@vuepress/plugin-search" "1.8.2"
     docsearch.js "^2.5.2"
     lodash "^4.17.15"
     stylus "^0.54.8"
@@ -7937,11 +7935,6 @@ tslib@^1.9.0:
   resolved "http://registry.npm.souche-inc.com/tslib/download/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha1-zy04vcNKE0vK8QkcQfZhni9nLQA=
 
-tslib@^2.2.0:
-  version "2.2.0"
-  resolved "http://registry.npm.souche-inc.com/tslib/download/tslib-2.2.0.tgz#fb2c475977e35e241311ede2693cee1ec6698f5c"
-  integrity sha1-+yxHWXfjXiQTEe3iaTzuHsZpj1w=
-
 tty-browserify@0.0.0:
   version "0.0.0"
   resolved "http://registry.npm.souche-inc.com/tty-browserify/download/tty-browserify-0.0.0.tgz#a157ba402da24e9bf957f9aa69d524eed42901a6"
@@ -8286,11 +8279,6 @@ vue-click-outside@1.1.0:
   resolved "http://registry.npm.souche-inc.com/vue-click-outside/download/vue-click-outside-1.1.0.tgz#48b7680b518923e701643cccb3e165854aad99eb"
   integrity sha1-SLdoC1GJI+cBZDzMs+FlhUqtmes=
 
-vue-demi@^0.5.3:
-  version "0.5.4"
-  resolved "http://registry.npm.souche-inc.com/vue-demi/download/vue-demi-0.5.4.tgz#cedb887af819ff0126c545a5540170d8895b816d"
-  integrity sha1-ztuIevgZ/wEmxUWlVAFw2IlbgW0=
-
 vue-disqus@^3.0.5:
   version "3.0.5"
   resolved "http://registry.npm.souche-inc.com/vue-disqus/download/vue-disqus-3.0.5.tgz#8d0dd5cabdba7c47f82d129d2907a64366842fa8"
@@ -8323,11 +8311,6 @@ vue-property-decorator@^8.1.1:
   integrity sha1-VxqRz40rUH9TfXm/gnWvMYRXL/8=
   dependencies:
     vue-class-component "^7.1.0"
-
-vue-property-decorator@^9.1.2:
-  version "9.1.2"
-  resolved "http://registry.npm.souche-inc.com/vue-property-decorator/download/vue-property-decorator-9.1.2.tgz#266a2eac61ba6527e2e68a6933cfb98fddab5457"
-  integrity sha1-JmourGG6ZSfi5oppM8+5j92rVFc=
 
 vue-router@^3.4.5:
   version "3.4.9"
@@ -8373,11 +8356,6 @@ vue@^2.6.10:
   version "2.6.12"
   resolved "http://registry.npm.souche-inc.com/vue/download/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha1-9evU+mvShpQD4pqJau1JBEVskSM=
-
-vue@^2.6.12:
-  version "2.6.13"
-  resolved "http://registry.npm.souche-inc.com/vue/download/vue-2.6.13.tgz#94b2c1b31fddf1dfcc34f28ec848ba8f01ea4c5b"
-  integrity sha1-lLLBsx/d8d/MNPKOyEi6jwHqTFs=
 
 vuejs-paginate@^2.1.0:
   version "2.1.0"
@@ -8461,32 +8439,29 @@ vuepress-plugin-smooth-scroll@^0.0.9:
   dependencies:
     smoothscroll-polyfill "^0.4.4"
 
-vuepress-theme-reco@1.6.6:
-  version "1.6.6"
-  resolved "http://registry.npm.souche-inc.com/vuepress-theme-reco/download/vuepress-theme-reco-1.6.6.tgz#f286f0000b1702b9511a439469c15b0d2b1e992d"
-  integrity sha1-8obwAAsXArlRGkOUacFbDSsemS0=
+vuepress-theme-reco@1.5.7:
+  version "1.5.7"
+  resolved "http://registry.npm.souche-inc.com/vuepress-theme-reco/download/vuepress-theme-reco-1.5.7.tgz#100c92b33dcd931874952ac4eb27e123cfbf87ce"
+  integrity sha1-EAySsz3Nkxh0lSrE6yfhI8+/h84=
   dependencies:
-    "@vue/composition-api" "^1.0.0-beta.20"
-    "@vuepress-reco/core" "^1.6.2"
-    "@vuepress-reco/vuepress-plugin-back-to-top" "^1.6.0"
-    "@vuepress-reco/vuepress-plugin-comments" "^1.6.0"
-    "@vuepress-reco/vuepress-plugin-loading-page" "^1.6.0"
-    "@vuepress-reco/vuepress-plugin-pagation" "^1.6.0"
+    "@vuepress-reco/vuepress-plugin-back-to-top" "^1.5.7"
+    "@vuepress-reco/vuepress-plugin-comments" "^1.5.7"
+    "@vuepress-reco/vuepress-plugin-loading-page" "^1.5.7"
+    "@vuepress-reco/vuepress-plugin-pagation" "^1.5.7"
     "@vuepress/plugin-blog" "1.9.2"
     "@vuepress/plugin-medium-zoom" "1.5.0"
     docsearch.js "2.6.3"
     md5 "2.2.1"
     vue-click-outside "1.1.0"
-    vue-demi "^0.5.3"
     vuepress-plugin-smooth-scroll "^0.0.9"
 
-vuepress@^1.7.1:
-  version "1.7.1"
-  resolved "http://registry.npm.souche-inc.com/vuepress/download/vuepress-1.7.1.tgz#bb0e139d8c407a0b5aa962cf9577832a5808937e"
-  integrity sha1-uw4TnYxAegtaqWLPlXeDKlgIk34=
+vuepress@^1.8.2:
+  version "1.8.2"
+  resolved "http://registry.npm.souche-inc.com/vuepress/download/vuepress-1.8.2.tgz#97e8bf979630611fc7b621fc4cc35b798ee5e847"
+  integrity sha1-l+i/l5YwYR/HtiH8TMNbeY7l6Ec=
   dependencies:
-    "@vuepress/core" "1.7.1"
-    "@vuepress/theme-default" "1.7.1"
+    "@vuepress/core" "1.8.2"
+    "@vuepress/theme-default" "1.8.2"
     cac "^6.5.6"
     envinfo "^7.2.0"
     opencollective-postinstall "^2.0.2"
