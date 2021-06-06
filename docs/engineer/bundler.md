@@ -1,11 +1,14 @@
 ---
-title: 构建工具
+title: 模块化
 date: 2020-04-29
 tags:
 - 工程化体系
 categories:
 - 前端知识
 ---
+
+## 为什么需要模块化
+前端的复杂化,导致需要使用软件管理的方法来管理代码
 
 ## bundler
 > 将多个模块根据依赖关系打包成一个或者多个文件
@@ -31,9 +34,12 @@ module.exports = function doSomething(n) {
 :::
 
 ::: tip AMD
-示例
+1. AMD是异步导入的
+**示例**
 ```js
-
+require(['moduleA', 'moduleB'], (moduleA, moduleB) => {
+    
+})
 ```
 :::
 
