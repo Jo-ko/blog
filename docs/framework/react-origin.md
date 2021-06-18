@@ -201,15 +201,11 @@ export default function App() {
 > 通过Fiber架构和Schedule机制实现组件更新挂载任务,避免了Reconciler和Render交替执行的时间占用过大
 
 Reconciler在Fiber架构下分成两个阶段
-::: tip 1. 调度阶段(reconciliation)
+
+1. 调度渲染阶段(reconciliation)
 在render|setState|forceUpdate触发,通过启发式diff算法找出需要更新的节点,并打上标记(我们称之为副作用effect),该阶段可以被中断
 
 
-<RecoDemo :collapse="true">
-  <template slot="code-js">
-    <<< @/docs/framework/code/react_reconciler_setState/enqueueSetState.js
-  </template>
-</RecoDemo>
 
 2. diff对比找出Fiber节点需要更新的部分,生成新的Fiber树并保存EffectList
 3. 计算任务的expriationTime(当前时间点 + 优先级常量)
@@ -237,14 +233,6 @@ Reconciler在Fiber架构下分成两个阶段
        7. render
 10. 该阶段对于用户是没有副作用(DOM更新等)的
 
-#### 2. 渲染阶段(commit): 将调度阶段需要处理的副作用一次性执行,该阶段不可调度不可中断
-该阶段是将调度阶段生成的effectList应用到真实节点中
-::: 
-
-::: tip UpdateQueue
-在16中UpdateQueue是单向链表,在17中UpdateQueue变成了单向循环链表
-:::
-
 ::: tip Schedule Work
 前期版本
 1. 找到FiberRoot并返回,同时设置节点的expirationTime和childExpirationTime为该update的expirationTime(如果这两个属性的时间小于update的时间)
@@ -269,6 +257,16 @@ Reconciler在Fiber架构下分成两个阶段
              1. [调用cancelDeferredCallBack取消之前的任务](https://github.com/facebook/react/blob/487f4bf2ee7c86176637544c5473328f96ca0ba2/packages/react-reconciler/src/ReactFiberScheduler.js#L1966)
              2. 计算timeout(当前的任务的延迟过期时间),[执行scheduleDeferredCallback](https://github.com/facebook/react/blob/487f4bf2ee7c86176637544c5473328f96ca0ba2/packages/scheduler/src/Scheduler.js#L317)
 :::
+
+11. 提交更新阶段(commit): 将调度阶段需要处理的副作用一次性执行,该阶段不可调度不可中断
+该阶段是将调度阶段生成的effectList应用到真实节点中
+
+
+::: tip UpdateQueue
+在16中UpdateQueue是单向链表,在17中UpdateQueue变成了单向循环链表
+:::
+
+
 
 
 ::: tip 如何在Reconciler层中断任务

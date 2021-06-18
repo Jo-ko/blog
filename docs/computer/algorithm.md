@@ -7,8 +7,21 @@ categories:
 - 前端知识
 ---
 
-# 数据结构
-## 1. 链表
+## 1. 数组 
+> 数组是内存大小一定的 ,用于存储一组具有相同类型的线性表数据结构
+
+### 双指针问题
+> 当遇到数组时可以优先使用双指针解决问题,两个指针同时遍历会降低空间复杂度和时间复杂度
+
+#### 快慢指针
+> 快慢指针也是双指针, 但是两个指针从同一侧开始遍历数组, 将这两个指针分别定义为快指针(fast)和慢指针(slow), 两个指针以不同的策略移动,当两个指针的值相等(或其他特殊条件)时,执行策略逻辑
+[LeetCode 有序数组去重问题](https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2gy9m/)
+
+#### 对撞指针
+> 在有序数组中.定义指向最左侧的为左指针,指向右侧的为右指针,从两头向中间遍历
+[LeetCode 救生艇问题](https://leetcode-cn.com/problems/boats-to-save-people/)
+
+## 2. 链表
 > 链表是一连串非线性顺序的数据结构,每一个节点都保存着相邻节点的内存地址
 
 优点
@@ -35,7 +48,7 @@ categories:
 ### 循环链表(此处展示双向循环列表)
 <<< @/docs/computer/code/algorithm/CycleLinkedList.ts
 
-## 2. 栈
+## 3. 栈
 > 这里说的栈是数据结构中的栈, 是一种先进后出的数据结构
 
 优点
@@ -57,7 +70,7 @@ categories:
 ### 单调栈(递增栈)
 <<< @/docs/computer/code/algorithm/ProseStack.ts
 
-## 3. 集合
+## 4. 集合
 > 集合是由一堆无序的、相关联的，且不重复的元素组成的组合
 
 作用
@@ -79,7 +92,7 @@ categories:
 ### 子集
 <<< @/docs/computer/code/algorithm/IsChild.ts
 
-## 4. 哈希hash表
+## 5. 哈希hash表
 > 哈希表是一种根据关键字直接访问对应内存地址数据的一种数据结构, 而建立关键字和对应的数据的这种关系的函数就是hash函数
 
 优点
@@ -199,7 +212,7 @@ cond(no)->e
 cond(yes)->process1->e2
 @flowend
 
-## 5. 树
+## 6. 树
 
 **名词解释**
 - 树: 以边相连接的节点的集合
