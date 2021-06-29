@@ -7,17 +7,8 @@ module.exports = {
     "port": 8000,
     'plugins': [
         'flowchart',
-        '@vuepress-reco/extract-code'
+        '@vuepress-reco/extract-code',
     ],
-    "theme": 'reco',
-    "themeConfig": {
-        // 密钥
-        keyPage: {
-          keys: ['3c07c009b7b52fcc5a72368896cb59fa'], // 1.3.0 版本后需要设置为密文
-          color: '#42b983', // 登录页动画球的颜色
-          lineColor: '#42b983' // 登录页动画线的颜色
-        }
-     },
     "head": [
         [
             "link",
@@ -148,7 +139,13 @@ module.exports = {
             "/docs/framework/": [
                 ["", "简述"],
                 "react",
-                "react-origin"
+                "react_origin",
+                "react_origin_renderAndUpdate",
+                "react_origin_schedule",
+                "react_origin_renderRoot",
+                "react_origin_beginWork",
+                "react_origin_completeWork",
+                "react_origin_completeRoot",
             ],
             "/docs/libs/": [
                 ["", "简述"],
@@ -199,7 +196,12 @@ module.exports = {
         "author": "Jooker",
         "authorAvatar": "/avatar.png",
         "record": "xxxx",
-        "startYear": "2020"
+        "startYear": "2020",
+        keyPage: {
+            keys: ['3c07c009b7b52fcc5a72368896cb59fa'], // 1.3.0 版本后需要设置为密文
+            color: '#42b983', // 登录页动画球的颜色
+            lineColor: '#42b983' // 登录页动画线的颜色
+        }
     },
     "markdown": {
         "lineNumbers": true
