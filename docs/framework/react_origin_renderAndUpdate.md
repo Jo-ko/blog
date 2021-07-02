@@ -246,7 +246,7 @@ type BaseFiberRootProperties = {|
     pendingContext: Object | null,
     // 判断是否是服务端渲染
     +hydrate: boolean,
-    // 当前root上剩余的过期时间
+    // 当前要更新渲染的是哪个优先级的任务
     nextExpirationTimeToWorkOn: ExpirationTime,
     // 当前更新对应的过期时间
     expirationTime: ExpirationTime,
