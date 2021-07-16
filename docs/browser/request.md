@@ -53,6 +53,10 @@ xhr.setRequestHeader('content-type', 'multipart/form-data');
 xhr.send();
 ```
 
+### 重要的请求头类型
+#### Content-type
+> MIME的数据格式标签, 使用Content-Type来表示请求和响应中的媒体类型信息
+
 ### 获取响应头
 
 #### 示例
@@ -235,6 +239,8 @@ function progressHandle(event) {
 ### 选择onload还是onreadystatechange的status===4
 - 在上面的请求过程中我们知道onreadystatechange无法区分abort/timeout/error的事件(readystatus都是4)
 - 所以当我们需要针对abort/timeout/error做事件监听的时候,请使用onload
+
+
 
 ## Fetch
 > 升级版XMLHttpRequest
