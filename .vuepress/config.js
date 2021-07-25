@@ -144,6 +144,7 @@ module.exports = {
                 "react_origin_schedule",
                 "react_origin_renderRoot",
                 "react_origin_beginWork",
+                "react_origin_diff",
                 "react_origin_completeWork",
                 "react_origin_completeRoot",
             ],

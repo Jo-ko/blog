@@ -895,7 +895,7 @@ function updateClassInstance(
 
 #### finishClassComponent
 1. 调用render方法
-2. 调用reconcileChildFibers将ReactElement转为Fiber,提供Diff
+2. 调用reconcileChildFibers将ReactElement转为Fiber,进行调和Diff
 
 ```flow js
 function finishClassComponent(
@@ -984,7 +984,7 @@ function finishClassComponent(
 
 ### FunctionComponent
 1. 执行function函数和hooks钩子
-2. 调用reconcileChildFibers将ReactElement转为Fiber,提供Diff
+2. 调用reconcileChildFibers将ReactElement转为Fiber,进行调和Diff
 
 ::: tip 流程
 
@@ -1067,174 +1067,10 @@ function updateFunctionComponent(
     return workInProgress.child;
 }
 
-export function reconcileChildren(
-    current: Fiber | null,
-    workInProgress: Fiber,
-    nextChildren: any,
-    renderExpirationTime: ExpirationTime,
-) {
-    if (current === null) {
-        // 首次挂载  
-        workInProgress.child = mountChildFibers(
-            workInProgress,
-            null,
-            nextChildren,
-            renderExpirationTime,
-        );
-    } else {
-        // 更新渲染
-        workInProgress.child = reconcileChildFibers(
-            workInProgress,
-            current.child,
-            nextChildren,
-            renderExpirationTime,
-        );
-    }
-}
-
-// 两个分支最终调用的都是childReconciler返回的工厂函数
-export const reconcileChildFibers = ChildReconciler(true);
-export const mountChildFibers = ChildReconciler(false);
-
-// 返回了reconcileChildFiners,通过闭包引用内置的方法 
-function ChildReconciler(shouldTrackSideEffects) {
-    // ...一些方法
-    
-    // 调和子节点
-    function reconcileChildFibers(
-        returnFiber: Fiber, // 实际传入的是workInProgress
-        currentFirstChild: Fiber | null, // 首次挂载传入的null,更新传入的是current.child
-        newChild: any, // render返回或者functio返回的ReactElement
-        expirationTime: ExpirationTime, // 任务优先级
-    ): Fiber | null {
-        // ...    
-    }
-    return reconcileChildFibers;
-}
-
 ```
 
-#### reconcileChildFibers
-1. reconcileChildFibers会根据新节点的不同类型,进行不同的处理.
-
-```flow js
-function reconcileChildFibers(
-    returnFiber: Fiber,
-    currentFirstChild: Fiber | null,
-    newChild: any,
-    expirationTime: ExpirationTime,
-): Fiber | null {
-    
-    // 判断传入的ReactElement是否是Fragment, 并且key不为null
-    const isUnkeyedTopLevelFragment =
-        typeof newChild === 'object' &&
-        newChild !== null &&
-        newChild.type === REACT_FRAGMENT_TYPE &&
-        newChild.key === null;
-    if (isUnkeyedTopLevelFragment) {
-        newChild = newChild.props.children;
-    }
-
-    // Handle object types
-    const isObject = typeof newChild === 'object' && newChild !== null;
-
-    if (isObject) {
-        switch (newChild.$$typeof) {
-            case REACT_ELEMENT_TYPE:
-                return placeSingleChild(
-                    reconcileSingleElement(
-                        returnFiber,
-                        currentFirstChild,
-                        newChild,
-                        expirationTime,
-                    ),
-                );
-            case REACT_PORTAL_TYPE:
-                return placeSingleChild(
-                    reconcileSinglePortal(
-                        returnFiber,
-                        currentFirstChild,
-                        newChild,
-                        expirationTime,
-                    ),
-                );
-        }
-    }
-
-    if (typeof newChild === 'string' || typeof newChild === 'number') {
-        return placeSingleChild(
-            reconcileSingleTextNode(
-                returnFiber,
-                currentFirstChild,
-                '' + newChild,
-                expirationTime,
-            ),
-        );
-    }
-
-    if (isArray(newChild)) {
-        return reconcileChildrenArray(
-            returnFiber,
-            currentFirstChild,
-            newChild,
-            expirationTime,
-        );
-    }
-
-    if (getIteratorFn(newChild)) {
-        return reconcileChildrenIterator(
-            returnFiber,
-            currentFirstChild,
-            newChild,
-            expirationTime,
-        );
-    }
-
-    if (isObject) {
-        throwOnInvalidObjectType(returnFiber, newChild);
-    }
-
-    if (__DEV__) {
-        if (typeof newChild === 'function') {
-            warnOnFunctionType();
-        }
-    }
-    if (typeof newChild === 'undefined' && !isUnkeyedTopLevelFragment) {
-        // If the new child is undefined, and the return fiber is a composite
-        // component, throw an error. If Fiber return types are disabled,
-        // we already threw above.
-        switch (returnFiber.tag) {
-            case ClassComponent: {
-                if (__DEV__) {
-                    const instance = returnFiber.stateNode;
-                    if (instance.render._isMockFunction) {
-                        // We allow auto-mocks to proceed as if they're returning null.
-                        break;
-                    }
-                }
-            }
-            // Intentionally fall through to the next case, which handles both
-            // functions and classes
-            // eslint-disable-next-lined no-fallthrough
-            case FunctionComponent: {
-                const Component = returnFiber.type;
-                invariant(
-                    false,
-                    '%s(...): Nothing was returned from render. This usually means a ' +
-                    'return statement is missing. Or, to render nothing, ' +
-                    'return null.',
-                    Component.displayName || Component.name || 'Component',
-                );
-            }
-        }
-    }
-
-    // Remaining cases are all treated as empty.
-    return deleteRemainingChildren(returnFiber, currentFirstChild);
-}
-```
-
-### renderWithHooks
+#### renderWithHooks
+> renderWithHooks主要处理了新增的hooks钩子的逻辑
 
 ```flow js
 export function renderWithHooks(
@@ -1246,32 +1082,41 @@ export function renderWithHooks(
     nextRenderExpirationTime: ExpirationTime,
 ): any {
     renderExpirationTime = nextRenderExpirationTime;
+    // 当前真要渲染的Fiber对象
     currentlyRenderingFiber = workInProgress;
+    // 这块memoizedState就是我们调用useState Hook对象
     nextCurrentHook = current !== null ? current.memoizedState : null;
 
     if (__DEV__) {
-        // ...  
+        // ... 
     } else {
+        // 用来存放 useState、useEffect 等 hook 函数的调用对象
+        // 首次渲染使用的是 HooksDispatcherOnMount
+        // 之后更新使用的是 HooksDispatcherOnUpdate
         ReactCurrentDispatcher.current =
             nextCurrentHook === null
                 ? HooksDispatcherOnMount
                 : HooksDispatcherOnUpdate;
     }
 
+    // 执行Function获取return返回的节点信息
+    // 可以看到函数组件传入的第一个参数是props,第二个参数是context
     let children = Component(props, refOrContext);
 
     if (didScheduleRenderPhaseUpdate) {
+        // 当触发更新时,执行一次循环, 重新调用函数计算children
         do {
             didScheduleRenderPhaseUpdate = false;
+            //记录渲染次数 
             numberOfReRenders += 1;
 
-            // Start over from the beginning of the list
             nextCurrentHook = current !== null ? current.memoizedState : null;
             nextWorkInProgressHook = firstWorkInProgressHook;
 
             currentHook = null;
             workInProgressHook = null;
             componentUpdateQueue = null;
+
 
             ReactCurrentDispatcher.current = __DEV__
                 ? HooksDispatcherOnUpdateInDEV
@@ -1284,22 +1129,22 @@ export function renderWithHooks(
         numberOfReRenders = 0;
     }
 
-    // We can assume the previous dispatcher is always this one, since we set it
-    // at the beginning of the render phase and there's no re-entrancy.
+    // 阻止hooks在函数外使用
+    // 只有在函数内执行dispatcher才会被赋予正确的环境值
     ReactCurrentDispatcher.current = ContextOnlyDispatcher;
 
     const renderedWork: Fiber = (currentlyRenderingFiber: any);
 
+    // 为当前的workInProgress设置相关属性
     renderedWork.memoizedState = firstWorkInProgressHook;
     renderedWork.expirationTime = remainingExpirationTime;
     renderedWork.updateQueue = (componentUpdateQueue: any);
     renderedWork.effectTag |= sideEffectTag;
-
-    // This check uses currentHook so that it works the same in DEV and prod bundles.
-    // hookTypesDev could catch more cases (e.g. context) but only in DEV bundles.
+    
     const didRenderTooFewHooks =
         currentHook !== null && currentHook.next !== null;
 
+    // 重置全局属性
     renderExpirationTime = NoWork;
     currentlyRenderingFiber = null;
 
@@ -1309,7 +1154,6 @@ export function renderWithHooks(
     workInProgressHook = null;
     nextWorkInProgressHook = null;
 
-
     remainingExpirationTime = NoWork;
     componentUpdateQueue = null;
     sideEffectTag = 0;
@@ -1318,10 +1162,16 @@ export function renderWithHooks(
 }
 ```
 
+
 ### IndeterminateComponent
-> FunctionalComponent首次渲染的默认类型,在第一次渲染后会确定具体类型
+> 组件首次渲染的默认类型,在第一次渲染后会确定具体类型
 
+::: tip 流程
 
+<img :src="$withBase('/frameWork/react_origin_renderRoot_beginWork_IndeterminateComponent.png')" alt="react_origin_renderRoot_beginWork_IndeterminateComponent">
+:::
+
+**源码**
 ```flow js
 function mountIndeterminateComponent(
     _current,
@@ -1414,98 +1264,319 @@ function mountIndeterminateComponent(
         return workInProgress.child;
     }
 }
+```
 
-export function renderWithHooks(
-    current: Fiber | null,
-    workInProgress: Fiber,
-    Component: any,
-    props: any,
-    refOrContext: any,
-    nextRenderExpirationTime: ExpirationTime,
-): any {
-    renderExpirationTime = nextRenderExpirationTime;
-    currentlyRenderingFiber = workInProgress;
-    // 这块就是我们调用useState Hook对象
-    nextCurrentHook = current !== null ? current.memoizedState : null;
+### HostRoot
+> ReactDOM.render为Root节点的创建update
 
-    if (__DEV__) {
-        // ... 
+::: tip 流程
+
+<img :src="$withBase('/frameWork/react_origin_renderRoot_beginWork_hostRoot.png')" alt="react_origin_renderRoot_beginWork_hostRoot">
+:::
+
+**源码**
+```flow js
+
+function updateHostRoot(current, workInProgress, renderExpirationTime) {
+    // context相关
+    pushHostRootContext(workInProgress);
+    const updateQueue = workInProgress.updateQueue;
+    const nextProps = workInProgress.pendingProps;
+    const prevState = workInProgress.memoizedState;
+    const prevChildren = prevState !== null ? prevState.element : null;
+    // 获取新的state
+    processUpdateQueue(
+        workInProgress,
+        updateQueue,
+        nextProps,
+        null,
+        renderExpirationTime,
+    );
+    const nextState = workInProgress.memoizedState;
+    // React DevTool依赖element这个属性
+    const nextChildren = nextState.element;
+    if (nextChildren === prevChildren) {
+        // 新老state相同就会复用原来节点  
+        resetHydrationState();
+        return bailoutOnAlreadyFinishedWork(
+            current,
+            workInProgress,
+            renderExpirationTime,
+        );
+    }
+    const root: FiberRoot = workInProgress.stateNode;
+    if (
+        (current === null || current.child === null) &&
+        root.hydrate &&
+        enterHydrationState(workInProgress)
+    ) {
+        // 首次挂载,设置更新标识符 
+        workInProgress.effectTag |= Placement;
+
+        // 这块和前面很像,最终进入reconcileChildFibers Diff
+        workInProgress.child = mountChildFibers(
+            workInProgress,
+            null,
+            nextChildren,
+            renderExpirationTime,
+        );
     } else {
-        // 用来存放 useState、useEffect 等 hook 函数的对象
-        // 对于第一个渲染走的是 HooksDispatcherOnMount
-        // 之后走的是 HooksDispatcherOnUpdate
-        ReactCurrentDispatcher.current =
-            nextCurrentHook === null
-                ? HooksDispatcherOnMount
-                : HooksDispatcherOnUpdate;
+        // 更新,进行reconcileChildFibers Diff
+        reconcileChildren(
+            current,
+            workInProgress,
+            nextChildren,
+            renderExpirationTime,
+        );
+        resetHydrationState();
     }
-
-    // 执行Function获取return返回的节点信息
-    // 可以看到函数组件传入的第一个参数是props,第二个参数是context
-    let children = Component(props, refOrContext);
-
-    if (didScheduleRenderPhaseUpdate) {
-        do {
-            didScheduleRenderPhaseUpdate = false;
-            numberOfReRenders += 1;
-
-            // Start over from the beginning of the list
-            nextCurrentHook = current !== null ? current.memoizedState : null;
-            nextWorkInProgressHook = firstWorkInProgressHook;
-
-            currentHook = null;
-            workInProgressHook = null;
-            componentUpdateQueue = null;
-
-
-            ReactCurrentDispatcher.current = __DEV__
-                ? HooksDispatcherOnUpdateInDEV
-                : HooksDispatcherOnUpdate;
-
-            children = Component(props, refOrContext);
-        } while (didScheduleRenderPhaseUpdate);
-
-        renderPhaseUpdates = null;
-        numberOfReRenders = 0;
-    }
-
-    // We can assume the previous dispatcher is always this one, since we set it
-    // at the beginning of the render phase and there's no re-entrancy.
-    ReactCurrentDispatcher.current = ContextOnlyDispatcher;
-
-    const renderedWork: Fiber = (currentlyRenderingFiber: any);
-
-    renderedWork.memoizedState = firstWorkInProgressHook;
-    renderedWork.expirationTime = remainingExpirationTime;
-    renderedWork.updateQueue = (componentUpdateQueue: any);
-    renderedWork.effectTag |= sideEffectTag;
-
-    // This check uses currentHook so that it works the same in DEV and prod bundles.
-    // hookTypesDev could catch more cases (e.g. context) but only in DEV bundles.
-    const didRenderTooFewHooks =
-        currentHook !== null && currentHook.next !== null;
-
-    renderExpirationTime = NoWork;
-    currentlyRenderingFiber = null;
-
-    currentHook = null;
-    nextCurrentHook = null;
-    firstWorkInProgressHook = null;
-    workInProgressHook = null;
-    nextWorkInProgressHook = null;
-
-    remainingExpirationTime = NoWork;
-    componentUpdateQueue = null;
-    sideEffectTag = 0;
-
-    // These were reset above
-    // didScheduleRenderPhaseUpdate = false;
-    // renderPhaseUpdates = null;
-    // numberOfReRenders = 0;
-
-
-    return children;
+    return workInProgress.child;
 }
 ```
 
-### reconcileChildFibers
+### HostComponent
+> 该类型表示的是原生节点(div,h1...)
+
+
+::: tip 流程
+
+<img :src="$withBase('/frameWork/react_origin_renderRoot_beginWork_hostComponent.png')" alt="react_origin_renderRoot_beginWork_hostComponent">
+:::
+
+**源码**
+```flow js
+
+function updateHostComponent(current, workInProgress, renderExpirationTime) {
+    // context相关
+    pushHostContext(workInProgress);
+
+    if (current === null) {
+        // 这块和服务端渲染有关,判断是否能够复用 
+        tryToClaimNextHydratableInstance(workInProgress);
+    }
+
+    const type = workInProgress.type;
+    const nextProps = workInProgress.pendingProps;
+    const prevProps = current !== null ? current.memoizedProps : null;
+
+    let nextChildren = nextProps.children;
+    //shouldSetTextContent返回true的条件, 满足下面三个条件之一
+    // 节点在(textarea, option, noscript) 之中
+    // 节点的子元素是字符串或者数字类型
+    // 存在dangerouslySetInnerHTML属性
+    const isDirectTextChild = shouldSetTextContent(type, nextProps);
+
+    if (isDirectTextChild) {
+        // dom标签内是纯文本,直接渲染文本内容
+        nextChildren = null;
+    } else if (prevProps !== null && shouldSetTextContent(type, prevProps)) {
+        // 之前是文本节点现在不是,打上标记
+        workInProgress.effectTag |= ContentReset;
+    }
+
+    // 只有在hostComponent和hostText中使用markRef
+    // 如果存在ref属性,打上ref标记  
+    markRef(current, workInProgress);
+
+    if (
+        renderExpirationTime !== Never &&
+        workInProgress.mode & ConcurrentMode &&
+        shouldDeprioritizeSubtree(type, nextProps)
+    ) {
+        // concurrentMode下设置过期时间为Never,优先级最低
+        workInProgress.expirationTime = workInProgress.childExpirationTime = Never;
+        return null;
+    }
+
+    // 最终还是调用reconcileChildren进行Diff
+    reconcileChildren(
+        current,
+        workInProgress,
+        nextChildren,
+        renderExpirationTime,
+    );
+    return workInProgress.child;
+}
+```
+
+### HostText
+> 纯文本节点
+
+```flow js
+function updateHostText(current, workInProgress) {
+    if (current === null) {
+        // 判断是否可以复用服务端的渲染
+        tryToClaimNextHydratableInstance(workInProgress);
+    }
+    // 直接渲染,不需要调和 
+    return null;
+}
+```
+
+### SuspenseComponent
+> react16新增的组件类型, 作用是异步操作的UI逻辑解耦
+
+1. 判断组件是否获取到异常(reject/promise),
+2. 捕获到异常渲染fallback节点
+3. 没有捕获到渲染最终节点
+4. 最终还是通过reconcileChildFibers进行调和diff
+
+```flow js
+
+function updateSuspenseComponent(
+    current,
+    workInProgress,
+    renderExpirationTime,
+) {
+    const mode = workInProgress.mode;
+    // fallback&children
+    const nextProps = workInProgress.pendingProps;
+    let nextState: SuspenseState | null = workInProgress.memoizedState;
+
+    // 用于判断Suspense是否超时了, 超时就显示fallback的内容
+    // 这块的超时指的是是否捕获到了错误
+    let nextDidTimeout;
+    // 判断是否抛出reject或者promise
+    if ((workInProgress.effectTag & DidCapture) === NoEffect) {
+        // 没抛出
+        nextState = null;
+        nextDidTimeout = false;
+    } else {
+        // 抛出了
+        nextState = {
+            timedOutAt: nextState !== null ? nextState.timedOutAt : NoWork,
+        };
+        nextDidTimeout = true;
+        workInProgress.effectTag &= ~DidCapture;
+    }
+
+    let child;
+    let next;
+    if (current === null) {
+        // 刚初始化挂载 
+        if (nextDidTimeout) {
+            // 触发第一次throw promise时触发,pendding状态
+            // 通过fallback创建子节点
+            const nextFallbackChildren = nextProps.fallback;
+            // 创建Fragment类型的fiber,用于保存最终渲染的节点
+            const primaryChildFragment = createFiberFromFragment(
+                null,
+                mode,
+                NoWork,
+                null,
+            );
+
+            if ((workInProgress.mode & ConcurrentMode) === NoContext) {
+                // 保存最终渲染节点的子节点信息
+                const progressedState: SuspenseState = workInProgress.memoizedState;
+                const progressedPrimaryChild: Fiber | null =
+                    progressedState !== null
+                        ? (workInProgress.child: any).child
+                        : (workInProgress.child: any);
+                primaryChildFragment.child = progressedPrimaryChild;
+            }
+
+            // 为fallback创建节点
+            const fallbackChildFragment = createFiberFromFragment(
+                nextFallbackChildren,
+                mode,
+                renderExpirationTime,
+                null,
+            );
+            primaryChildFragment.sibling = fallbackChildFragment;
+            child = primaryChildFragment;
+            next = fallbackChildFragment;
+            child.return = next.return = workInProgress;
+        } else {
+            // 初始化Suspense的时候触发
+            // 所以一开始会走这个逻辑,再走上面的逻辑
+            const nextPrimaryChildren = nextProps.children;
+            child = next = mountChildFibers(
+                workInProgress,
+                null,
+                nextPrimaryChildren,
+                renderExpirationTime,
+            );
+        }
+    } else {
+        // 更新阶段, throw reject或者返回结果的时候 
+        // prevState 会携带timedOutAt属性
+        const prevState = current.memoizedState;
+        const prevDidTimeout = prevState !== null;
+        if (prevDidTimeout) {
+            // 表示之前已经抛出异常 
+            const currentPrimaryChildFragment: Fiber = (current.child: any);
+            const currentFallbackChildFragment: Fiber = (currentPrimaryChildFragment.sibling: any);
+            if (nextDidTimeout) {
+                // 还是有异常抛出, 复用之前的主要节点
+                const nextFallbackChildren = nextProps.fallback;
+                const primaryChildFragment = createWorkInProgress(
+                    currentPrimaryChildFragment,
+                    currentPrimaryChildFragment.pendingProps,
+                    NoWork,
+                );
+                // ...
+                // 渲染fallback节点, 跳过主要节点 
+                next = fallbackChildFragment;
+                child.return = next.return = workInProgress;
+            } else {
+                // 表示结束了suspense, 状态返回了真实数据,而不是抛出异常
+                // 渲染真实节点
+                const nextPrimaryChildren = nextProps.children;
+                const currentPrimaryChild = currentPrimaryChildFragment.child;
+                const primaryChild = reconcileChildFibers(
+                    workInProgress,
+                    currentPrimaryChild,
+                    nextPrimaryChildren,
+                    renderExpirationTime,
+                );
+                child = next = primaryChild;
+            }
+        } else {
+            // ... 
+        }
+        workInProgress.stateNode = current.stateNode;
+    }
+
+    workInProgress.memoizedState = nextState;
+    workInProgress.child = child;
+    return next;
+}
+```
+
+## 节点复用
+
+```flow js
+
+function bailoutOnAlreadyFinishedWork(
+    current: Fiber | null,
+    workInProgress: Fiber,
+    renderExpirationTime: ExpirationTime,
+): Fiber | null {
+    cancelWorkTimer(workInProgress);
+
+    if (current !== null) {
+        // Reuse previous context list
+        workInProgress.contextDependencies = current.contextDependencies;
+    }
+
+    if (enableProfilerTimer) {
+        // Don't update "base" render times for bailouts.
+        stopProfilerTimerIfRunning(workInProgress);
+    }
+
+    // Check if the children have any pending work.
+    const childExpirationTime = workInProgress.childExpirationTime;
+    if (childExpirationTime < renderExpirationTime) {
+        // The children don't have any work either. We can skip them.
+        // TODO: Once we add back resuming, we should check if the children are
+        // a work-in-progress set. If so, we need to transfer their effects.
+        return null;
+    } else {
+        // This fiber doesn't have work, but its subtree does. Clone the child
+        // fibers and continue.
+        cloneChildFibers(current, workInProgress);
+        return workInProgress.child;
+    }
+}
+```
