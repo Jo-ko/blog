@@ -201,7 +201,7 @@ function addRootToSchedule(root: FiberRoot, expirationTime: ExpirationTime) {
         // 说明该FiberRoot已经在调度队列中,直接更新expirationTime
         const remainingExpirationTime = root.expirationTime;
         if (expirationTime > remainingExpirationTime) {
-            // Update the priority.
+            // 优先级更高时更新
             root.expirationTime = expirationTime;
         }
     }

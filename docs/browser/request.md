@@ -57,6 +57,7 @@ xhr.send();
 #### Content-type
 > MIME的数据格式标签, 使用Content-Type来表示请求和响应中的媒体类型信息
 
+#### cache-control
 ### 获取响应头
 
 #### 示例

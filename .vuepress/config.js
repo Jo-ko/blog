@@ -155,7 +155,8 @@ module.exports = {
             "/docs/engineer/": [
                 ["", "简述"],
                 "bundler",
-                "workingFlow"
+                "workingFlow",
+                "middleware"
             ],
             "/docs/softSkill/": [
                 ["", "简述"]
