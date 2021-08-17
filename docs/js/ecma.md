@@ -1,6 +1,6 @@
 ---
 title: ECMAScript 版本
-date: 2020-04-29
+date: 2018-04-29
 tags:
 - JS 
 categories:

@@ -124,7 +124,8 @@ module.exports = {
                 ["", "简述"],
                 "ecma",
                 "dom",
-                "regExp"
+                "regExp",
+                "prototype"
             ],
             "/docs/native/": [
                 ["", "简述"],
