@@ -68,7 +68,12 @@ module.exports = {
                     },
                     {
                         "text": "框架原理",
-                        "link": "/docs/framework/"
+                        "items": [
+                            {
+                                "text": "React16",
+                                "link": "/docs/framework/react16/"
+                            }
+                        ],
                     },
                     {
                         "text": "类库基础",
@@ -137,14 +142,11 @@ module.exports = {
             "/docs/backEnd/": [
                 ["", "简述"]
             ],
-            "/docs/framework/": [
+            "/docs/framework/react16/": [
                 ["", "简述"],
-                "react",
-                "react_origin",
                 "react_origin_renderAndUpdate",
                 "react_origin_schedule",
                 "react_origin_renderRoot",
-                "react_origin_beginWork",
                 "react_origin_diff",
                 "react_origin_completeWork",
                 "react_origin_completeRoot",

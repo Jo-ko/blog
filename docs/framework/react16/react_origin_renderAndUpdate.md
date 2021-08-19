@@ -1,6 +1,6 @@
 ---
-title: React源码-render&更新 
-date: 2020-04-29 
+title: React16源码-render&更新 
+date: 2020-01-02 
 tags:
 - 框架基础 
 categories:
@@ -12,8 +12,12 @@ categories:
 ## ReactDOM.render()
 
 > ver.16
-### 调用入口(ver.16)
+### 调用入口
 ```flow js
+//业务调用入口 
+ReactDOM.render(<App/>, document.getElementById('root'))
+
+// 实际调用的对象
 const ReactDOM = {
     // ....
     render(
@@ -32,7 +36,7 @@ const ReactDOM = {
     // ...
 }
 ```
-### [legacyRenderSubtreeIntoContainer](https://github.com/facebook/react/blob/487f4bf2ee7c86176637544c5473328f96ca0ba2/packages/react-dom/src/client/ReactDOM.js#L540) (ver.16)
+### legacyRenderSubtreeIntoContainer (ver.16)
 1. 创建FiberRoot
 2. 调用render方法创建DOM并挂载
 
@@ -81,7 +85,7 @@ function legacyRenderSubtreeIntoContainer(
 }
 ```   
 
-### [legacyCreateRootFromDOMContainer](https://github.com/facebook/react/blob/487f4bf2ee7c86176637544c5473328f96ca0ba2/packages/react-dom/src/client/ReactDOM.js#L495) (ver.16) 
+### legacyCreateRootFromDOMContainer (ver.16) 
 1. 清除挂载节点的子节点
 2. new一个ReactRoot, 创建FiberRoot
 
@@ -108,7 +112,9 @@ function legacyCreateRootFromDOMContainer(
 }
 ```
 
-创建FiberRoot和RootFiber
+### 创建FiberRoot和RootFiber
+1. FiberRoot指的是整个应用的根节点,只有一个
+2. RootFiber指的是通过ReactDOM.render或者ReactDOM.unstable_createRoot创建出来的应用的节点
 
 ```flow js
 function ReactRoot(
@@ -202,7 +208,7 @@ ReactRoot.prototype.createBatch = function (): Batch {
 ::: tip FiberRoot
 通过调用createFiberRoot创建的对象, FiberRoot是应用的根节点, 通过current属性连接RootFiber(Fiber)
 ```flow js
-type BaseFiberRootProperties = {|
+type BaseFiberRootProperties = {
     // root挂载容器,调用ReactROM.render(<App />, document.getElementById('root'))的第二个参数
     containerInfo: any,
     // 在不支持增量更新的平台使用,比如RN,需要使用持久化更新 
@@ -256,7 +262,7 @@ type BaseFiberRootProperties = {|
     firstBatch: Batch | null,
     // root之间关联的链表结构
     nextScheduledRoot: FiberRoot | null,
-|};
+};
 ```
 :::
 
@@ -264,7 +270,7 @@ type BaseFiberRootProperties = {|
 1. 通过createFiber创建,RootFiber是当前Fiber树的根节点
 2. Fiber和ReactElement是一一对应的
 3. Fiber在原有的虚拟dom结构上增加的多种属性,同时修改了将原有的树形结构改成了链表结构
-    1. 用于表示 __链表结构属性__,如return,child. sibling
+    1. 用于表示 __链表结构属性__,如return,child,sibling
     2. 用于原来的React Element的 __静态数据结构__ ,保存了组件DOM信息,如tag,type,stateNode
     3. 用于保存需要更新的 __动态的工作单元__,如pendingProps, effectTag
 
@@ -339,7 +345,7 @@ export type Fiber = {|
     childExpirationTime: ExpirationTime,
 
     // 在Fiber树更新的过程中，每个Fiber都会有一个跟其对应的Fiber
-    // 我们称他为`current <==> workInProgress`
+    // 我们称他为`current <==> workInProgress`(Fiber双缓存技术)
     // 在渲染完成之后他们会交换位置
     alternate: Fiber | null,
 
@@ -623,14 +629,14 @@ export type UpdateQueue<State> = {
    // 队列中最后一个update
    lastUpdate: Update<State> | null,
 
-   // 队列中第一个捕获类型的update
+   // 队列中第一个更新出现错误的update
    firstCapturedUpdate: Update<State> | null,
-   // 队列中最后一个捕获类型的update
+   // 队列中最后一个更新出现错误的update
    lastCapturedUpdate: Update<State> | null,
 
-   // 第一个sideEffect
+   // 第一个副作用(dom diff)
    firstEffect: Update<State> | null,
-   // 最后一个sideEffect
+   // 最后一个副作用(dom diff)
    lastEffect: Update<State> | null,
 
    // 第一个捕获类型的sideEffect
