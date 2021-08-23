@@ -1,6 +1,6 @@
 ---
 title: 浏览器架构
-date: 2020-04-29
+date: 2019-01-12
 tags:
 - 浏览器知识
 categories:
@@ -100,7 +100,7 @@ categories:
 <img :src="$withBase('/browser/servicfication.svg')" alt="servicfication">
 
 #### 2. iframe进程隔离
-> 除了为不同的tab设置不同的渲染进程的同时, 给tab下的iframe也单独设置渲染线程
+> 除了为不同的tab设置不同的渲染进程的同时, 给tab下的iframe也单独设置渲染进程
 
 <img :src="$withBase('/browser/isolation.png')" alt="isolation">
 
@@ -134,7 +134,74 @@ categories:
 1. 主线程(GUI渲染线程,JS引擎线程, 定时器线程, 网络请求线程, 事件处理线程)
 2. 工作线程(多个)
 3. 合成器线程
+   1. 渲染进程中最先被告知垂直同步事件(操作系统告知浏览器刷新一帧的信号)
+   2. 接收用户事件,会调节是否需要进入主线程
 4. 光栅线程
+   1. 由合成线程派生出的线程,用于处理栅格化内容
+
+#### 渲染进程在一帧中的执行过程
+<img :src="$withBase('/browser/what_happend_render_process.png')" alt="what_happend_render_process">
+
+**针对主线程的详细过程**
+<img :src="$withBase('/browser/what_happend_render_process_detail.png')" alt="what_happend_render_process_detail">
+
+::: tip JS EventLoop
+在上一帧结束后,触发JS的EventLoop机制,调用宏任务(包括用户的行为触发的回调事件,除了resize和scroll事件)和微任务
+:::
+
+::: tip Frame Start
+开始刷新一帧
+1. 显卡有一个缓冲区的地方,存放着显示器要显示的图像,显示器按照一定频率读取这块缓冲区
+2. 显示器在读取下一帧时,会发出一个垂直同步信号(VSync)给操作系统,操作系统再通知浏览器刷新一帧, 合成线程是最早收到VSync事件的
+:::
+
+::: tip Event Handle
+1. 合成线程收到用户的行为事件(resize, scroll, toucheMove, mousemove), [动画事件](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/animationend_event), [媒体查询事件](https://developer.mozilla.org/en-US/docs/Web/API/MediaQueryList/onchange)
+2. 线程会判断是否需要进入主线程执行上面事件注册的回调,注意的是并非每一帧合成线程都会去处理这些事件的
+3. 所以resize和scroll事件是自带节流的
+:::
+
+::: tip rAF
+1. 执行帧动画回调,__红线表示在JS中当我们了scrollWidth、clientHeight、ComputedStyle等会触发了强制重排__
+2. 执行intersectionObserver回调
+:::
+
+**下面的渲染阶段浏览器会判断是否执行渲染**
+1. 浏览器判断更新渲染不会带来视觉上的改变.
+2. 帧动画回调为空.
+
+::: tip Parse HTML HTML解析
+解析HTML, 如果插入/删除DOM元素,会触发该过程
+:::
+
+::: tip Recalc Styles 样式更新
+重新计算样式, 当修改样式或者类名改变的时候会触发该过程
+:::
+
+::: tip Layout 布局更新
+计算每个课件可见元素的几何信息, 浏览器会判断哪些改变需要重新计算
+:::
+
+::: tip Update Layer Tree 更新图层树
+创建层叠上下文, 为元素的深度进行排序
+:::
+
+::: tip Paint 绘制栅格化
+1. 记录要执行哪些绘画调用,对于新增的元素或者修改的元素,记录draw调用,序列化进一个叫做SkPicture的数据结构中
+2. 执行这些绘画调用, 进行栅格化,执行了draw调用,填充纹理, 会将SkPicture中的操作replay出来,这里才是将这些操作真正执行:光栅化和填充进位图
+:::
+
+::: tip Composite 合成
+1. 主线程里的这一步会计算出每个Graphics Layers的合成时所需要的data,包括位移（Translation）、缩放（Scale）、旋转（Rotation）、Alpha 混合等操作的参数
+2. 在信息计算完成后,会通知合成线程进行处理, 这将包括 will-change、重叠元素和硬件加速的 canvas 等.
+3. 合成线程会将图层分成计算好的图块
+4. 这一步其实没有真正完成最后的合成,直接通知执行主线程执行requestIdleCallback
+:::
+
+::: tip Raster Schedule and Rasterize 光栅调度和栅格化
+1. 一种是在CPU中执行, 合成线程派生出光栅线程,多线程并行执行SkPicture records中的绘画操作,最后commit上传到GPU绘制
+2. 另一种是直接在GPU中执行SkPicture records中的绘画操作,就是我们常说的GPU渲染
+:::
 
 #### 构造DOM
 1. 主线程解析HTML文本数据,将其构建成DOM树(DOM是当前页面的结构表示,也是js可操作的数据和API)和CSSOM树
@@ -191,3 +258,6 @@ document.documentElement.addEventListener('touchmove', (e) => {
 [comment]: <> (https://hacks.mozilla.org/2017/10/the-whole-web-at-maximum-fps-how-webrender-gets-rid-of-jank/)
 
 [comment]: <> (https://segmentfault.com/a/1190000022633988)
+
+[comment]: <> (https://juejin.cn/post/6844903506059477000)
+
