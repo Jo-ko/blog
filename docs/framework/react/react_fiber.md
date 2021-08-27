@@ -11,13 +11,49 @@
 > 在React16之前的版本对更新/挂载 -> 组件生命周期调用 -> 计算和对比虚拟dom -> 将不同更新到真实DOM树上这一个整个过程是一气呵成的,
 > 因此当整个组件较大时,由于执行的时间较长,会造成js主线程被长时间占用,使得浏览器在一帧中可执行的操作受限,从而影响用户的其他操作和页面的渲染,所以我们需要一种机制来可中断/恢复更新执行过程
 
-## Fiber是如何控制更新中断/恢复的
+## Fiber是如何控制任务中断/恢复的(调度的)
 > 严格意义上说Fiber本质是一种数据结构(16中的虚拟dom),它并非控制中断/恢复,而是保存了更新的数据节点相关信息,给Schedule调度器提供了更新任务优先级属性等一些信息的 __执行单元__,Schedule调度器才是真正控制更新中断/恢复的执行者
-1. 我们将Fiber视为一个执行单元, 每次通过requestIdlCallback(React自己实现了调度器Schedule)执行完一个单元,就会检查剩余的时间,如果没有时间就会将控制权交还给宿主环境
-2. Fiber的调度利用了requestAnimation在EventLoop进入渲染前开始触发执行任务,同时记录时间,通过调用MessageChannel在下一帧最开始的时候开始执行任务(根据EventLoop运行机制,MessageChannel会在宏任务中较先执行,其实setImmediately才是最先执行的宏任务)
-3. Fiber中的更新任务依然是串行执行的,对于那些高优先级的任务依旧会被阻塞
+1. 我们将fiber视为一个执行单元, 每次通过requestIdleCallback(React自己实现了调度器Schedule)执行完一个单元(workLoop),就会检查剩余的时间,如果没有时间就会将控制权交还给宿主环境
+2. Fiber的调度利用了requestAnimation在EventLoop进入渲染前开始触发执行任务,同时记录时间,通过调用MessageChannel, 任务会在下一帧最开始的时候开始执行(根据EventLoop运行机制,MessageChannel会在宏任务中较先执行,但其实setImmediate才是最先执行的宏任务)
+
+### 两种情况
+::: tip 任务的过期时间超时,任务被中断
+中断: 在shouldYield判断中断更新后,会将当前任务保存在scheduledHostCallback变量中
+
+恢复: 在再次触发调度的时候,会从中断的scheduledHostCallback变量中的任务恢复
+:::
+
+::: tip 高优先级任务插入,低优先级被中断
+中断: 调用cancelCallback将任务的callback设置为null, 在workLoop执行的过程中callback=null会被踢出任务队列
+
+恢复: 调用unstable_scheduleCallback重新恢复任务, 不同的是,调度会重新从root开始
+:::
+
+::: tip 大致流程图
+<img :src="$withBase('/framework/react_origin_fiber_interrupter.png')" alt="react_origin_fiber_interrupter">
+:::
+
+
+## Fiber中断机制的问题
+4. Fiber中的更新任务依然是串行执行的,对于那些高优先级的任务依旧会被阻塞
+5. 整个中断与恢复的过程中最复杂的是如何保持状态的一致性和视图的一致性
 
 ### Fiber的中断/恢复机制是如何控制状态一致性和视图一致性
+> 状态必须按照插入顺序进行计算，但任务可以按优先级顺序执行
+
+::: tip
+假设有一updateQueue为A1 - B2 - C1 - D2；
+A1、B2等代表一个update，其中字母代表state，数字大小代表优先级，1为高优先级；
+调度任务按高低优先级依次执行，第一次调度是高优先级任务，从头结点firstUpdate开始处理，processUpdateQueue会跳过低优先级的update；
+则执行的update为A1 - C1，本次调度得到的最终state为AC，baseState为A，queue的firstUpdate指针指向B2，以供下次调度使用；
+第二次调度是低优先级任务，此时firstUpdate指向B2，则从B2开始，执行的update为
+B2 - C1 - D2，最终state将与baseState：A合并，得到ABCD, __所以整个过程C1会被执行两次__
+
+整个机制就会导致render阶段的生命周期(will类型生命周期)发生了两次
+
+整个过程发生在processUpdateQueue方法中
+:::
+
 
 ## Fiber的数据结构组成
 1. 用于表示链表结构属性的信息
@@ -25,7 +61,6 @@
 type Fiber = {
     // 当前Fiber节点的父节点
     return: Fiber | null,
-
     // 当前Fiber节点的子节点
     child: Fiber | null,
     // 当前Fiber节点的兄弟节点
@@ -279,6 +314,10 @@ export type Fiber = {|
 1. 在Reconciliation的render阶段将所有更改点在workInProgress(WIP树)上处理完成,然后在commit阶段统一更新到浏览器上
 2. 由于WIP树的节点是可以共用的,因此这样可以减少内存的分配和垃圾的回收
 3. 同时修改WIP树节点不会影响原有的current树,类似于git中的Fork出来的分支
+4. 保存执行任务中的信息,避免任务打断而造成数据丢失
 
 ### 双缓存结构
 当前在屏幕上显示的成为current Fiber, 在内存中构建的成为workInProgress Fiber
+
+## 为什么Vue没有Fiber(分片机制)
+[尤雨溪的回答](https://github.com/vuejs/rfcs/issues/89#issuecomment-546988615)
