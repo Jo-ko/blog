@@ -72,6 +72,10 @@ module.exports = {
                             {
                                 "text": "React16",
                                 "link": "/docs/framework/react16/"
+                            },
+                            {
+                                "text": "webpack",
+                                "link": "/docs/framework/webpack/"
                             }
                         ],
                     },
@@ -150,6 +154,10 @@ module.exports = {
                 "react_origin_diff",
                 "react_origin_completeWork",
                 "react_origin_completeRoot",
+            ],
+            "/docs/framework/webpack/": [
+                ["", "简述"],
+                "webpack_v1"
             ],
             "/docs/libs/": [
                 ["", "简述"],
