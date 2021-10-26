@@ -1,9 +1,11 @@
-## module & chunk & bundle
+# webpack
+
+## module & chunk & bundle三者的区别
 1. module 表示我们书写各个模块
 2. chunk 表示webpack处理各个模块依赖的关系网络
 3. bundle 表示实际输出用于加载的文件,bundle包含多个chunk
 
-## hash & chunkhash & contenthash
+## hash & chunkhash & contenthash三者的区别
 > 三个属性都是用于控制文件的持久化缓存
 
 ::: tip hash
@@ -20,33 +22,33 @@
 :::
 
 ::: tip contenthash
-跟文件的内容有关,文件的内容不变,hash值不变,因此能很好的解决chunkhash带来的问题,但是contenthash在webpack4 之前都只能在css上使用，并不能在js上使用，并且现在也只是在production环境上才能使用
+1. 跟文件的内容有关,文件的内容不变,hash值不变,因此能很好的解决chunkhash带来的问题
+2. contenthash在webpack4 之前都只能在css上使用，并不能在js上使用，并且现在也只是在production环境上才能使用
+3. contenthash会增加构建的时间
 :::
 
 ## filename & chunkFilename
-filename用于在entry中标明的入口文件打包后的文件名
-chunkFilename是未在entry中标明的但是需要输出的文件名
+- filename用于在entry中标明的入口文件打包后的文件名
+- chunkFilename是 __未在entry中标明__ 的但是需要输出的文件名
 
 ## webpackPrefetch & webpackPreload & webpackChunkName
 三个都是用于webpack的[魔法注释](https://webpack.docschina.org/api/module-methods/#magic-comments)
-webpackPrefetch: 预拉取,会以<link rel="prefetch" as="script" href='path/to/module'>的形式在 __空闲的时候__ 拉取模块代码
-webpackPreload: 预加载,在加载主代码的时候以<link rel="preload" as="script" href='path/to/module'>的形式 _并行_ 拉取模块代码
-webpackChunkName: 用于显示额外异步加载模块的文件别名
+
+- webpackPrefetch: 预拉取,会以<link rel="prefetch" as="script" href='path/to/module'>的形式在 __空闲的时候__ 拉取模块代码
+- webpackPreload: 预加载,在加载主代码的时候以<link rel="preload" as="script" href='path/to/module'>的形式 _并行_ 拉取模块代码
+- webpackChunkName: 用于显示额外异步加载模块的文件别名
 
 ## loader和plugin
 1. loader是用于处理模块的,webpack会把资源模块转成js的有效模块,用于依赖收集和分析,webpack默认只认识js和json文件(json是v2版本新增的),我们需要对其他资源提供loader翻译官
-2. plugins的范围更广, 通过webpack提供的生命周期钩子(Tapable)处理打包优化,资源管理和环境参数注入
-
-## 常用的loader
-
-## 常用的plugin
+2. plugins的范围更广, 通过webpack提供的生命周期钩子(Tapable)处理这个项目模块的 __打包流程,资源管理和环境参数注入__
 
 ## webpack的一般步骤
-> webpack是基于流的构建过程
+> webpack是基于流和配置的构建过程
 1. 配置参数收集: webpack.config.js文件 + 命令参数 + 默认参数
-2. 编译器初始化: 通过配置参数初始化Compiler,同时注入默认的插件
-3. Module分析: 从入口文件开始编译每个文件,针对不同的文件会调用不同的loader进行编译,每个module都会分析其依赖的文件,然后递归执行该流程,最终形成一个依赖收集树
+2. 编译器初始化: 通过配置参数初始化 __Compiler__,同时注入默认的 __插件,钩子和配置属性__
+3. Module分析: 从入口文件开始编译每个文件,生成 __Compilation__ 针对不同的文件会调用不同的loader进行编译,每个module都会分析其依赖的文件,然后递归执行该流程,最终形成一个 依赖收集树
 4. Chunk生成: 通过对module的依赖树分析生成Chunk文件并输出到本地或者内存中
+5. 整个过程通过 __Tapable__ 发布一些钩子通知, plugins会订阅这些钩子通知,执行对应的操作
 
 
 ## webpack文件监听和webpack热更新
@@ -116,7 +118,46 @@ module.exports = {
 }
 ```
 ### 链接DLL文件
+```js
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const webpack = require('webpack');
+const path = require('path');
 
+module.exports = {
+    // ...项目配置参数
+   plugins: [
+      new webpack.DllReferencePlugin({
+         // 注意: DllReferencePlugin 的 context 必须和 package.json 的同级目录，要不然会链接失败
+         context: path.resolve(__dirname, '../'),
+         manifest: path.resolve(__dirname, '../dll/react.manifest.json'),
+      }),
+      new AddAssetHtmlPlugin({
+         filepath: path.resolve(__dirname, '../dll/react.dll.js'),
+      }),
+   ]
+}
+```
+### 使用自动生成DLL插件
+```js
+const path = require('path');
+const AutoDllPlugin = require('autodll-webpack-plugin');
+
+module.exports = {
+    plugins: [
+       new AutoDllPlugin({
+          inject: true, // 设为 true 就把 DLL bundles 插到 index.html 里
+          filename: '[name].dll.js',
+          context: path.resolve(__dirname, '../'), // AutoDllPlugin 的 context 必须和 package.json 的同级目录，要不然会链接失败
+          entry: {
+             react: [
+                'react',
+                'react-dom'
+             ]
+          }
+       })
+    ]
+}
+```
 
 ## 版本比较
 ### webpack2和webpack1
