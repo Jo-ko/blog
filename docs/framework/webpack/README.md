@@ -1,9 +1,31 @@
-## module & chunk & bundle
+---
+title: Webpack通用知识点
+---
+
+## 与gulp和grunt
+### 相同点
+1. 三者都是基于流的概念,grunt侧重配置驱动,gulp侧重代码驱动,webpack也是比较偏重配置驱动
+2. 都是前端工程化的重要一环
+
+### 不同点
+1. gulp和grunt的目的是处理单一任务的,比如编译,压缩,图片裁剪
+2. webpack的目的是处理各个模块关系之间的,找出依赖最终生成bundle文件
+3. 严格意义上说gulp和grunt才算是严格意义上的构建工具,webpack实际上是打包工具
+
+## 与rollup和parcel
+### 相同点
+1. 其本质都是用于模块打包,但由于插件体系的丰富扩展,逐步成为前端构建工具的主力
+### 不同点
+1. 三者的目的不同, webpack更注重业务型的项目, rollup更注重JS模块的处理, parcel注重的是零配置
+
+## 相关混淆点
+
+### module & chunk & bundle
 1. module 表示我们书写各个模块
 2. chunk 表示webpack处理各个模块依赖的关系网络
 3. bundle 表示实际输出用于加载的文件,bundle包含多个chunk
 
-## hash & chunkhash & contenthash
+### hash & chunkhash & contenthash
 > 三个属性都是用于控制文件的持久化缓存
 
 ::: tip hash
@@ -23,25 +45,26 @@
 跟文件的内容有关,文件的内容不变,hash值不变,因此能很好的解决chunkhash带来的问题,但是contenthash在webpack4 之前都只能在css上使用，并不能在js上使用，并且现在也只是在production环境上才能使用
 :::
 
-## filename & chunkFilename
+### filename & chunkFilename
 filename用于在entry中标明的入口文件打包后的文件名
 chunkFilename是未在entry中标明的但是需要输出的文件名
 
-## webpackPrefetch & webpackPreload & webpackChunkName
+### webpackPrefetch & webpackPreload & webpackChunkName
 三个都是用于webpack的[魔法注释](https://webpack.docschina.org/api/module-methods/#magic-comments)
-webpackPrefetch: 预拉取,会以<link rel="prefetch" as="script" href='path/to/module'>的形式在 __空闲的时候__ 拉取模块代码
-webpackPreload: 预加载,在加载主代码的时候以<link rel="preload" as="script" href='path/to/module'>的形式 _并行_ 拉取模块代码
-webpackChunkName: 用于显示额外异步加载模块的文件别名
 
-## loader和plugin
+- webpackPrefetch: 预拉取,会以<link rel="prefetch" as="script" href='path/to/module'>的形式在 __空闲的时候__ 拉取模块代码
+- webpackPreload: 预加载,在加载主代码的时候以<link rel="preload" as="script" href='path/to/module'>的形式 _并行_ 拉取模块代码
+- webpackChunkName: 用于显示额外异步加载模块的文件别名
+
+### loader和plugin
 1. loader是用于处理模块的,webpack会把资源模块转成js的有效模块,用于依赖收集和分析,webpack默认只认识js和json文件(json是v2版本新增的),我们需要对其他资源提供loader翻译官
 2. plugins的范围更广, 通过webpack提供的生命周期钩子(Tapable)处理打包优化,资源管理和环境参数注入
 
-## 常用的loader
+### 常用的loader
 
-## 常用的plugin
+### 常用的plugin
 
-## webpack的一般步骤
+### webpack的一般步骤
 > webpack是基于流的构建过程
 1. 配置参数收集: webpack.config.js文件 + 命令参数 + 默认参数
 2. 编译器初始化: 通过配置参数初始化Compiler,同时注入默认的插件
@@ -49,7 +72,7 @@ webpackChunkName: 用于显示额外异步加载模块的文件别名
 4. Chunk生成: 通过对module的依赖树分析生成Chunk文件并输出到本地或者内存中
 
 
-## webpack文件监听和webpack热更新
+### webpack文件监听和webpack热更新
 ::: tip 文件监听
 通过轮询判断文件的最后编辑时间是否发生变化,如果文件发生变化,会在aggregateTimeout之后更新文件, 需要手动刷新浏览器
 ```bash
@@ -92,9 +115,10 @@ module.exports = {
 ```
 :::
 
-## DLL
+### DLL
 > DLL文件用于优化webpack构建速度,但是由于webpack在v4版本之后的性能提升, DLL文件的提升作用不是非常明显,一些框架已经移除了DLL的打包
-### 创建DLL文件
+
+::: tip 创建DLL文件
 ```js
 // webpack.dll.config.js
 module.exports = {
@@ -115,11 +139,13 @@ module.exports = {
    ]
 }
 ```
-### 链接DLL文件
+:::
 
+::: tip 链接DLL文件
+:::
 
-## 版本比较
-### webpack2和webpack1
+### 版本比较
+#### webpack2和webpack1
 > 版本变化较大, 增加新特性
 1. 增加对ES Module支持
 2. 可以混用ES Module,AMD,CommonJS
@@ -131,11 +157,11 @@ module.exports = {
 6. 默认配置json-loader,解析JSON文件
 7. 增加了一些内置的插件
 
-### webpack3和webpack2
+#### webpack3和webpack2
 1. 加入Scope Hoisting(作用域提升), 通过配置plugins: webpack.optimize.ModuleConcatenationPlugin,注意只适用与ES Module
 2. 增加Magic Comments(魔法注释),为Code Splitting的chunk提供chunkName
 
-### webpack4和webpack3
+#### webpack4和webpack3
 1. 新增mode环境属性,用于零配置启动项目, 针对不同的环境做一些默认的参数配置优化
    1. none: 退出任何默认优化配置
    2. development：会将 process.env.NODE_ENV 的值设为 development，启用optimization.nameModules、optimization.namedChunks（原nameModulesPlugin、NamedChunksPlugin 弃用）
@@ -147,5 +173,5 @@ module.exports = {
 6. 无法使用V1版本的loader属性,只能使用rules语法规则配置loader配置
 7. HappyPack升级
 
-### webpack4和webpack5
+#### webpack4和webpack5
 webpack5相比之前的版本更新较大,整个架构也发生了变化,具体变化看[官方文档](https://webpack.docschina.org/blog/2020-10-10-webpack-5-release)
