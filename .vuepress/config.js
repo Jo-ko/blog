@@ -135,7 +135,9 @@ module.exports = {
                 "dom",
                 "regExp",
                 "prototype",
-                "scope"
+                "scope",
+                "this",
+                "gc"
             ],
             "/docs/native/": [
                 ["", "简述"],
@@ -158,7 +160,9 @@ module.exports = {
             ],
             "/docs/framework/webpack/": [
                 ["", "简述"],
-                "webpack_v1"
+                "webpack_v1",
+                "webpack_v4",
+                "webpack_tapable"
             ],
             "/docs/libs/": [
                 ["", "简述"],
