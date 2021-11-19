@@ -1,6 +1,26 @@
-# webpack
+---
+title: Webpack通用知识点
+---
 
-## module & chunk & bundle三者的区别
+## 与gulp和grunt
+### 相同点
+1. 三者都是基于流的概念,grunt侧重配置驱动,gulp侧重代码驱动,webpack也是比较偏重配置驱动
+2. 都是前端工程化的重要一环
+
+### 不同点
+1. gulp和grunt的目的是处理单一任务的,比如编译,压缩,图片裁剪
+2. webpack的目的是处理各个模块关系之间的,找出依赖最终生成bundle文件
+3. 严格意义上说gulp和grunt才算是严格意义上的构建工具,webpack实际上是打包工具
+
+## 与rollup和parcel
+### 相同点
+1. 其本质都是用于模块打包,但由于插件体系的丰富扩展,逐步成为前端构建工具的主力
+### 不同点
+1. 三者的目的不同, webpack更注重业务型的项目, rollup更注重JS模块的处理, parcel注重的是零配置
+
+## 相关混淆点
+
+### module & chunk & bundle
 1. module 表示我们书写各个模块
 2. chunk 表示webpack处理各个模块依赖的关系网络
 3. bundle 表示实际输出用于加载的文件,bundle包含多个chunk
@@ -31,14 +51,14 @@
 - filename用于在entry中标明的入口文件打包后的文件名
 - chunkFilename是 __未在entry中标明__ 的但是需要输出的文件名
 
-## webpackPrefetch & webpackPreload & webpackChunkName
+### webpackPrefetch & webpackPreload & webpackChunkName
 三个都是用于webpack的[魔法注释](https://webpack.docschina.org/api/module-methods/#magic-comments)
 
 - webpackPrefetch: 预拉取,会以<link rel="prefetch" as="script" href='path/to/module'>的形式在 __空闲的时候__ 拉取模块代码
 - webpackPreload: 预加载,在加载主代码的时候以<link rel="preload" as="script" href='path/to/module'>的形式 _并行_ 拉取模块代码
 - webpackChunkName: 用于显示额外异步加载模块的文件别名
 
-## loader和plugin
+### loader和plugin
 1. loader是用于处理模块的,webpack会把资源模块转成js的有效模块,用于依赖收集和分析,webpack默认只认识js和json文件(json是v2版本新增的),我们需要对其他资源提供loader翻译官
 2. plugins的范围更广, 通过webpack提供的生命周期钩子(Tapable)处理这个项目模块的 __打包流程,资源管理和环境参数注入__
 
@@ -51,7 +71,7 @@
 5. 整个过程通过 __Tapable__ 发布一些钩子通知, plugins会订阅这些钩子通知,执行对应的操作
 
 
-## webpack文件监听和webpack热更新
+### webpack文件监听和webpack热更新
 ::: tip 文件监听
 通过轮询判断文件的最后编辑时间是否发生变化,如果文件发生变化,会在aggregateTimeout之后更新文件, 需要手动刷新浏览器
 ```bash
