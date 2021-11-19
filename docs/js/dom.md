@@ -196,8 +196,13 @@ document.getElementsByTagName() // 根据元素的标签寻找对应的节点, �
 
 // 注意,querySelector和querySelectorAll返回的是node的快照,这个与之前的获取dom元素的方法不同
 document.querySelector()
-document.querySelectorAll() 
+document.querySelectorAll()
 
 // 查询时候存在某元素, 返回boolean
 document.body.matches()
 ```
+## NodeIterator和TreeWalker
+两者的作用就是深度优先遍历dom树, 通过createNodeIterator和createTreeWalker来创建迭代对象
+
+## document.createRange
+常见的作用是高亮选择

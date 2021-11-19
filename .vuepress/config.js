@@ -137,7 +137,11 @@ module.exports = {
                 "prototype",
                 "scope",
                 "this",
-                "gc"
+                "gc",
+                "proxy",
+                "async",
+                "boom",
+                "event"
             ],
             "/docs/native/": [
                 ["", "简述"],
