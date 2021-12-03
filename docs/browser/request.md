@@ -241,7 +241,11 @@ function progressHandle(event) {
 - 在上面的请求过程中我们知道onreadystatechange无法区分abort/timeout/error的事件(readystatus都是4)
 - 所以当我们需要针对abort/timeout/error做事件监听的时候,请使用onload
 
-
+### OPTIONS预检请求
+预检请求会携带三个信息
+- origin
+- Access-Control-Request-Method
+- Access-control-Request-Headers
 
 ## Fetch
 > 升级版XMLHttpRequest
@@ -389,6 +393,31 @@ const response = await fetch('/users', {
 })
 ```
 :::
+
+## WebSocket
+```ts
+// 创建连接
+// ws可以无视同源策略,连接任何地址
+const ws = new WebSocket('ws://localhost:8080');
+// 客户端发送数据
+ws.send();
+// 客户端接收数据
+ws.onmessage = function(event) { 
+    let data = event.data;
+    // 对数据执行某些操作
+};
+// 其他监听事件
+ws.onopen = function () {
+    // 连接成功事件
+}
+ws.onclose = function() {
+    // 连接关闭事件
+}
+ws.onerror = function(event) {
+    // 是否关闭干净, 错误码, 错误原因
+    const {wasClean, code, reason} = event;
+}
+```
 
 
 [comment]: <> (https://segmentfault.com/a/1190000004322487)

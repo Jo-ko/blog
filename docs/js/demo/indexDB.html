@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+    let db;
+    const version = 2;
+    const request = indexedDB.open('admin', version);
+    // 打开数据库错误时触发
+    request.onerror = function (event) {
+        console.log(event.target.errorCode)
+        console.log('error')
+    }
+    // 打开数据库成功时触发
+    request.onsuccess = function (event) {
+        db = event.target.result;
+        console.log('success')
+    }
+    // 数据库首次创建或者版本更新时触发
+    request.onupgradeneeded = function (event) {
+        const db = event.target.result;
+        console.log(db);
+        if (db.objectStoreNames.contains('users')) {
+            // 存在users表的时候删除旧的user表
+            db.deleteObjectStore('user')
+        }
+        // 创建user表,keyPath表示将要作为键的属性名称
+        db.createObjectStore('user', {keyPath: 'username'});
+    }
+</script>
+</html>

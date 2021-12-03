@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>Title</title>
+</head>
+<body>
+    <a href="https://www.baidu.com">click</a>
+</body>
+<script>
+    (function() {
+        let count = 0;
+        window.addEventListener('pageShow', () => {
+            count++;
+            console.log('count: %s', count);
+        })
+    })()
+</script>
+</html>

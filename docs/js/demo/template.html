@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="container">
+    <h2>hello world</h2>
+</div>
+</body>
+<script>
+    const shadowDom = document.getElementById('container').attachShadow({mode: "open"});
+    shadowDom.innerHTML = '<div id="inner"><slot></slot></div>'
+</script>
+</html>

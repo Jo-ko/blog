@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<!--    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">-->
+    <title>Title</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        font-size: 0;
+        line-height: 1;
+    }
+    #drawing {
+        /*width: 100px;*/
+        /*height: 100px;*/
+    }
+</style>
+<body>
+<canvas id="drawing" width="500px" height="500px">A drawing of something.</canvas>
+</body>
+<script>
+    const drawing = document.querySelector('#drawing');
+    if (drawing.getContext) {
+        let context = drawing.getContext('2d');
+        context.beginPath();
+        context.arc(100, 100, 99, 0, 2 * Math.PI);
+        context.closePath();
+    }
+</script>
+</html>

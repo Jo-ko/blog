@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div is="x-foo" id="foo"></div>
+</body>
+<script>
+    class FoolElement extends HTMLDivElement {
+        constructor() {
+            super();
+            this.attachShadow({mode: 'open'});
+            this.shadowRoot.innerHTML = `
+                <div>111111</div>
+            `
+        }
+        static get observedAttributes() {
+            return ['bar'];
+        }
+        get bar() {
+            return this.getAttribute('bar')
+        }
+        set bar(value) {
+            return this.setAttribute('bar', value)
+        }
+        connectedCallback() {
+            console.log('connectedCallback')
+        }
+        disconnectedCallback() {
+            console.log('disconnectedCallback')
+        }
+        attributeChangedCallback(name, oldValue, newValue) {
+            if (oldValue !== newValue) {
+                console.log(`set ${name} value: ${oldValue} to ${newValue}`)
+                this[name] = newValue
+            }
+        }
+    }
+    customElements.define('x-foo', FoolElement, {extends: 'div'});
+    document.querySelector('#foo').setAttribute('bar', true);
+</script>
+</html>

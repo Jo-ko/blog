@@ -141,7 +141,10 @@ module.exports = {
                 "proxy",
                 "async",
                 "boom",
-                "event"
+                "event",
+                "canvas",
+                "form",
+                "customEle"
             ],
             "/docs/native/": [
                 ["", "简述"],

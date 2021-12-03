@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form name="form1" action="/name/post">
+    <input type="text" name="form1" />
+    <select name="location" id="selLocation" multiple>
+        <option value="Sunnyvale, CA">Sunnyvale</option>
+        <option value="Los Angeles, CA">Los Angeles</option>
+        <option value="Mountain View, CA">Mountain View</option>
+        <option value="">China</option>
+        <option>Australia</option>
+    </select>
+    <button value="Submit Form" id="submit">submit</button>
+    <button type="reset" value="Reset Form">reset</button>
+</form>
+<div class="editable" id="richedit" contenteditable></div>
+</body>
+<script>
+    let textbox = document.forms[0].elements[0];
+    // textbox.addEventListener("focus", (event) => {
+    //     console.log('focus');
+    // });
+    // textbox.addEventListener('select', (event) => {
+    //     console.log('select', textbox.selectionStart, textbox.selectionEnd);
+    // })
+    // textbox.addEventListener('input', () => {
+    //     console.log('input');
+    // })
+    // textbox.addEventListener('focus', (event) => {
+    //     console.log('focus');
+    //     event.target.select();
+    // });
+    // textbox.addEventListener("blur", (event) => {
+    //     console.log('blur');
+    // });
+    // textbox.addEventListener("change", (event) => {
+    //     console.log('change');
+    // });
+    textbox.addEventListener('keypress', function(e) {
+        console.log(e);
+    })
+</script>
+</html>

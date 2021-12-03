@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>Title</title>
+</head>
+<body>
+    <button id="btn">点击</button>
+    <div id="box" style="width: 100px;height: 100px;background-color: #000"></div>
+</body>
+<script>
+    window.onload = () => {
+        const btn = document.getElementById('btn');
+        // btn.onclick = function (event) {
+        //     console.log(1)
+        // }
+        // btn.onclick = function (event) {
+        //     console.log(2)
+        // }
+        // btn.addEventListener('click', function () {
+        //     console.log(1)
+        // })
+        // btn.addEventListener('click', function () {
+        //     console.log(2)
+        // })
+        // btn.addEventListener('click', function () {
+        //     console.log(3)
+        // }, true)
+
+        // btn.addEventListener('click', function (e) {
+        //     console.log(e.target === e.currentTarget);
+        //     console.log(e.target === this);
+        //     console.log(e.currentTarget === this);
+        // })
+
+        // document.body.addEventListener('click', function (e) {
+        //     console.log(e.target === e.currentTarget); // false
+        //     console.log(e.target === this); // false
+        //     console.log(e.currentTarget === this); // true
+        // })
+
+
+        // btn.onclick = function (e) {
+        //     console.log('onclick, eventPhase: %s, target: btn', e.eventPhase);
+        // }
+        // document.body.addEventListener('click', function (e) {
+        //     console.log('body cap, eventPhase: %s, target: %s', e.eventPhase, e.target)
+        // }, true)
+        // document.body.addEventListener('click', function (e) {
+        //     console.log('body bubble, eventPhase: %s, target: %s', e.eventPhase, e.target)
+        // })
+    }
+</script>
+</html>
