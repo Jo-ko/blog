@@ -19,18 +19,112 @@
     // 打开数据库成功时触发
     request.onsuccess = function (event) {
         db = event.target.result;
-        console.log('success')
+        console.log('open success');
     }
     // 数据库首次创建或者版本更新时触发
     request.onupgradeneeded = function (event) {
         const db = event.target.result;
-        console.log(db);
         if (db.objectStoreNames.contains('users')) {
             // 存在users表的时候删除旧的user表
-            db.deleteObjectStore('user')
+            db.deleteObjectStore('users')
         }
         // 创建user表,keyPath表示将要作为键的属性名称
-        db.createObjectStore('user', {keyPath: 'username'});
+        db.createObjectStore('users', {keyPath: 'username'});
+    }
+
+
+
+    function errorHandle(target, msg) {
+        target.onerror = function () {
+            console.log(msg)
+        }
+    }
+
+    function successHandle(target, msg) {
+        target.onsuccess = function (event) {
+            msg = typeof msg === "function" ? msg.call(null, event) : msg;
+            console.log(msg)
+        }
+    }
+
+    function initDBStore() {
+        const transaction = db.transaction("users", "readwrite");
+        const store = transaction.objectStore("users");
+
+        errorHandle(transaction, '事务被取消');
+        successHandle(transaction, '事务完成');
+        return store;
+    }
+
+    function getDBStore(key) {
+        const store = initDBStore();
+        const data = store.get(key);
+        errorHandle(data, `get key: ${key} error`)
+        successHandle(data, (event) => `get key: ${key} success, value: ${JSON.stringify(event.target.result)}`)
+    }
+
+    // 插入
+    function insert(data) {
+        const store = initDBStore();
+        const request = store.add(data);
+        errorHandle(request, 'add data fail');
+        successHandle(request, 'add data success');
+    }
+
+    // 更新
+    function update(data) {
+        const store = initDBStore();
+        const request = store.put(data);
+        errorHandle(request, 'put data fail');
+        successHandle(request, 'put data success');
+    }
+
+    // 创建游标
+    function runCursor(store, dbRange, direction, createIndexStore) {
+        store = store || initDBStore();
+        dbRange = dbRange || null;
+        direction = direction || 'next';
+        const request = createIndexStore ? store.openKeyCursor(dbRange, direction) : store.openCursor(dbRange, direction);
+        errorHandle(request, 'open cursor fail');
+        request.onsuccess = function (event) {
+            const cursor = event.target.result;
+            if (cursor) { // 永远需要检查
+                console.log('get cursor data value: %s', JSON.stringify(cursor.value));
+                if (cursor.key === 'jooker') {
+                    value = cursor.value;
+                    value.age = 999;
+                    const updateRequest = cursor.update(value);
+                    errorHandle(updateRequest, 'update cursor fail');
+                    successHandle(updateRequest, 'update cursor success');
+                }
+                cursor.continue(); // 会重触发onsuccess事件
+            }
+        }
+    }
+
+    // 创建范围
+    function runRangeWithOnly() {
+        const dbRange = IDBKeyRange.only('jooker');
+        runCursor(null, dbRange)
+    }
+    function runRangeWithUpperBound() {
+        const dbRange = IDBKeyRange.upperBound('jooker');
+        runCursor(null, dbRange)
+    }
+    function runRangeWithLowerBound() {
+        const dbRange = IDBKeyRange.lowerBound('jooker');
+        runCursor(null, dbRange)
+    }
+    function runRangeWithBound() {
+        const dbRange = IDBKeyRange.bound('harry', 'lupon');
+        runCursor(null, dbRange)
+    }
+
+    // 索引
+    function runIndexDB() {
+        const store = initDBStore();
+        const index = store.createIndex('id', 'id', {unique: true});
+        runCursor(index, null, null, true);
     }
 </script>
 </html>

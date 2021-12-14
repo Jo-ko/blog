@@ -127,7 +127,8 @@ module.exports = {
                 "crossOrigin",
                 "request",
                 "cache",
-                "struct"
+                "struct",
+                "workThread"
             ],
             "/docs/js/": [
                 ["", "简述"],
