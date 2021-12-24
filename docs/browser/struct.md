@@ -104,6 +104,9 @@ categories:
 
 <img :src="$withBase('/browser/isolation.png')" alt="isolation">
 
+#### 3. 渲染进程共用
+当a页面打开b页面的时候, 如果两个站点为同一个站点的时候会共用一个渲染进程
+
 ### What happens in "地址导航"?
 1. 主进程的UI线程(进程)获取渲染进程的用户输入,解析并判断是搜索项还是其他统一资源定位符(URL), 通知当前tab的渲染进程渲染loading状态
 2. 如果是搜索项,调用Storage线程(进程)获取配置项中的默认搜索引擎,根据规则拼接地址,交给network线程(进程)
