@@ -77,6 +77,39 @@ p.catch((reason) => setTimeout(console.log, 0, reason)); // 3
 2. 即使 await 后面跟着一个立即可用的值, __函数的其余部分也会被异步求值__
 3. 不可用于全局环境
 
+### async和await的本质
+> 就是Promise和生成器的结合,或者说是微任务和协程的应用
+
+::: tip async
+定义:异步执行和隐式返回Promise
+```javascript
+async function foo() { return 2}
+// 等同于
+Promise.resolve(2)
+```
+:::
+
+::: tip await
+```javascript
+示例代码
+async function foo() {
+    console.log(1)
+    let a = await 100
+    console.log(a)
+    console.log(2)
+}
+console.log(0)
+foo()
+console.log(3)
+```
+图解过程
+<img :src="$withBase('/js/await_process.png')" alt="await_process">
+需要注意的:
+1. 执行到await的时候会将权限交给父协程,此时await后面的会被包裹于Promise中执行
+2. await转换后的Promise执行then的时候会将权限返回给子协程执行,同时清理微任务队列(包括父协程的微任务)
+:::
+
+
 ### 异步函数和Promise的区别
 Promise相比异步函数会保留 __更完整的栈追踪__,同时也比异步函数 __占用更多的内存__
 ```ts

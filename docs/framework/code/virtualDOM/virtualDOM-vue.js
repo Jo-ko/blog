@@ -53,7 +53,7 @@ function tokenizer(html) {
             char = html[++current];
             if (endReg.test(char)) {
                 tokenizer.push({
-                    type: 'selfClose',
+                    type: 'startTagSelfClose',
                     value: '/>'
                 })
             } else {
@@ -64,7 +64,7 @@ function tokenizer(html) {
         }
         if (endReg.test(char)) {
             tokenizer.push({
-                type: 'close',
+                type: 'startTagClose',
                 value: '>'
             })
             current++;

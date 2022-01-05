@@ -136,11 +136,27 @@ categories:
 #### 渲染进程中的线程
 1. 主线程(GUI渲染线程,JS引擎线程, 定时器线程, 网络请求线程, 事件处理线程)
 2. 工作线程(多个)
-3. 合成器线程
+3. 合成线程
    1. 渲染进程中最先被告知垂直同步事件(操作系统告知浏览器刷新一帧的信号)
    2. 接收用户事件,会调节是否需要进入主线程
 4. 光栅线程
    1. 由合成线程派生出的线程,用于处理栅格化内容
+#### 渲染流程
+1. 渲染进程将 HTML 内容转换为能够读懂的 DOM 树结构。
+2. 渲染引擎将 CSS 样式表转化为浏览器可以理解的 styleSheets,计算出 DOM 节点的样式。
+    1. 生成styleSheets
+    2. 样式属性转换
+    3. 计算每个节点的样式(样式继承&层叠规则)
+3. 创建布局树，并计算元素的布局信息。
+   1. 剔除非显示节点
+   2. 计算节点的位置信息
+4. 对布局树进行分层，并生成分层树。
+5. 为每个图层生成绘制列表，并将其提交到合成线程。
+6. 合成线程将图层分成图块，并在光栅化线程池中将图块转换成位图。
+7. 合成线程发送绘制图块命令 DrawQuad 给浏览器进程。
+8. 浏览器进程根据 DrawQuad 消息生成页面，并显示到显示器上。
+
+<img :src="$withBase('/browser/render_process.png')" alt="render_process">
 
 #### 渲染进程在一帧中的执行过程
 <img :src="$withBase('/browser/what_happend_render_process.png')" alt="what_happend_render_process">
@@ -256,11 +272,74 @@ document.documentElement.addEventListener('touchmove', (e) => {
 
 [查看css属性引发的重绘和节流](https://csstriggers.com/)
 
-[comment]: <> (https://developers.google.com/web/updates/2018/09/inside-browser-part1)
 
-[comment]: <> (https://hacks.mozilla.org/2017/10/the-whole-web-at-maximum-fps-how-webrender-gets-rid-of-jank/)
+### JS为什么会影响页面渲染
+Html解析器遇到js代码的时候,会暂停当前的解析,将脚本代码交给v8引擎处理,因为脚本很有可能会修改DOM结构
 
-[comment]: <> (https://segmentfault.com/a/1190000022633988)
+### CSS是如何影响页面渲染
+### CSSOM
+1. 为js提供操作样式表的能力
+2. 为布局树的合成提供基础的样式信息
 
-[comment]: <> (https://juejin.cn/post/6844903506059477000)
+::: tip 没有JS,页面解析流程
+```html
+<html>
+<head>
+    <link href="theme.css" rel="stylesheet">
+</head>
+<body>
+    <div>geekbang com</div>
+</body>
+</html>
+```
+<img :src="$withBase('/browser/css_render_section_one.png')" alt="css_render_section_one">
+:::
 
+::: tip 有js
+这块js会阻塞DOM的生成,并且同时js解析完成要依赖CSSOM,因此css也阻塞了DOM的生成
+```html
+<html>
+<head>
+    <link href="theme.css" rel="stylesheet">
+</head>
+<body>
+    <div>geekbang com</div>
+    <script>
+        console.log('time.geekbang.org')
+    </script>
+    <div>geekbang com</div>
+</body>
+</html>
+```
+<img :src="$withBase('/browser/css_render_section_two.png')" alt="css_render_section_two">
+
+:::
+
+#### 缩短白屏时间
+1. 通过内联 JavaScript、内联 CSS 来移除这两种类型的文件下载，这样获取到 HTML 文件之后就可以直接开始渲染流程了。
+2. 但并不是所有的场合都适合内联，那么还可以尽量减少文件大小，比如通过 webpack 等工具移除一些不必要的注释，并压缩 JavaScript 文件。
+3. 还可以将一些不需要在解析 HTML 阶段使用的 JavaScript 标记上 async 或者 defer。
+4. 对于大的 CSS 文件，可以通过媒体查询属性，将其拆分为多个不同用途的 CSS 文件，这样只有在特定的场景下才会加载特定的 CSS 文件。
+
+### 分层和合成
+为了提升每帧的渲染效率,将元素分解为多个图层的操作就称为分层，最后将这些图层合并到一起的操作就称为合成
+
+#### 如何实现分层和合成机制
+分层: 在布局树生成后,会生成层树,最终在渲染引擎的主线程生成对应的绘制指令
+合成: 在生成绘制指令后,进行栅格化, 形成一张张图片,最后由合成线程进行合成
+
+<img :src="$withBase('/browser/layered_composite.png')" alt="layered_composite">
+
+### Chrome 浏览器为标签页分配渲染进程的策略
+1. 如果两个标签页都位于同一个浏览上下文组，且属于同一站点，那么这两个标签页会被浏览器分配到同一个渲染进程中
+2. 如果这两个条件不能同时满足，那么这两个标签页会分别使用不同的渲染进程来渲染
+
+#### 阻止跳转链接站点成为同一个浏览上下文组
+a标签添加ref="noopener noreferer"属性来断开上下文组关系
+```html
+<a href="https://fh.dasouch.com" target="_blank" ref="noopener noreferer"></a>
+```
+
+### 站点隔离
+页面中内嵌的iframe同样遵守同一站点分配原则
+<img :src="$withBase('/browser/siteIsolation.png')" alt="siteIsolation">

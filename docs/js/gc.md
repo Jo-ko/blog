@@ -42,6 +42,11 @@ categories:
 2. 如果对象在内存中存在较长一段时间, 那么可以认定是常驻变量
 :::
 
+### 主副垃圾回收器
+1. 标记活动对象和非活动对象
+2. 对非活动对象进行清理
+3. 整理内存碎片
+
 ::: tip 副垃圾回收器
 1. 特点: 操作频繁, 空间小, 根据Scavenge算法将空间划分为两个半空间: From Space(活动空间) & To Space(闲置空间)
 2. 清除策略: 
@@ -49,7 +54,7 @@ categories:
    2. 标记活动对象和非活动对象: 根节点开始遍历其引用的子节点,被搜索到的对象表示可达( __对象的可达性__ ),就是活动对像,其余的就是非活动对象
    3. 复制From Space的活动对象到To Space并排序
    4. 释放From Space的非活动对象
-   5. 指向From Space的指针与To Space的指针进行交换
+   5. __指向From Space的指针与To Space的指针进行交换__
 3. Scavenge算法的缺点: Scavenge算法是通过牺牲空间来换取时间,并且能够使用的内存较少(被划分成了两个空间,只有一个空间是活跃的)
 :::
 
@@ -95,3 +100,14 @@ categories:
 [垃圾回收](http://kmanong.top/kmn/qxw/form/article?id=83995&cate=51)
 [V8 之旅： 垃圾回收器](http://newhtml.net/v8-garbage-collection/)
 [隐藏类](https://segmentfault.com/a/1190000039247203)
+
+
+```javascript
+(function () {
+    var name = 'jooker';
+    function clickHandle() {
+        console.log(name);
+    }
+    document.addEventListener('click', clickHandle)
+})()
+```
