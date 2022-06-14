@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>1px处理</title>
+    <style>
+        .box .btn-1px{
+            width: 300rem;
+            height: 200rem;
+            border: 1rem solid red;
+            border-radius: 10rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="btn-1px"></div>
+    </div>
+</body>
+<script>
+    const viewport = document.querySelector("meta[name=viewport]");
+    //下面是根据设备像素设置viewport
+    if (window.devicePixelRatio == 1) {
+        viewport.setAttribute('content', 'width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no');
+    }
+    if (window.devicePixelRatio == 2) {
+        viewport.setAttribute('content', 'width=device-width,initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=no');
+    }
+    if (window.devicePixelRatio == 3) {
+        viewport.setAttribute('content', 'width=device-width,initial-scale=0.3333333333333333, maximum-scale=0.3333333333333333, minimum-scale=0.3333333333333333, user-scalable=no');
+    }
+    const docEl = document.documentElement;
+    const fontsize = (docEl.clientWidth / 750) + 'px';
+    docEl.style.fontSize = fontsize;
+
+</script>
+</html>

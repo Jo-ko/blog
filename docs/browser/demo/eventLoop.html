@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="container" style="width: 200px; height: 200px; background-color: red; font-size: 100px; color: #fff;">
+    0
+</div>
+<script>
+    let i = 0;
+    const container = document.getElementById('container');
+    runMacroTask();
+    // runMicrotask();
+    // function runMicrotask() {
+    //     queueMicrotask(() => {
+    //         if (i > 10) return;
+    //         container.innerText = i;
+    //         container.style.backgroundColor = i % 2 === 0 ? 'blue' : 'red';
+    //         i++;
+    //         runMicrotask();
+    //     });
+    // }
+    function runMacroTask() {
+        setTimeout(() => {
+            if (i > 10) return;
+            container.innerText = i;
+            container.style.backgroundColor = i % 2 === 0 ? 'blue' : 'red';
+            i++;
+            runMacroTask();
+        }, 1);
+    }
+</script>
+</body>
+</html>

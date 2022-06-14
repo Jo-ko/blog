@@ -7,6 +7,37 @@ categories:
 - 前端知识
 ---
 
+## 分类
+1. 数据结构: 
+   - Array 数组
+   - Stack/Queue 栈/队列
+   - PriorityQueue(heap) 优先队列(堆)
+   - LinkedList(single/double) 链表
+   - Tree/Binary Tree 数/二叉树
+   - Binary Search Tree 二叉搜索树
+   - HashTable, Disjoint Set
+   - Trie
+   - BloomFilter
+   - LRU Cache
+2. 算法:
+   - General Coding
+   - In-order/Pre-order traversal
+   - Greedy
+   - Recursion/BackTrace
+   - Breadth-first search
+   - Depth-first search
+   - Divide and Conquer
+   - Dynamic Programming
+   - Binary Search 二分查找
+   - Graph
+
+::: tip Master Theorem 主定理
+Binary Search: O(log n)
+Binary tree traversal(二叉树遍历): O(n)
+Optimal sorted matrix(矩阵排序): O(n)
+Merge sort(普通排序): O(n * log n)
+:::
+
 ## 1. 数组 
 > 数组是内存大小一定的 ,用于存储一组具有相同类型的线性表数据结构
 
@@ -20,8 +51,63 @@ categories:
 #### 对撞指针
 > 在有序数组中.定义指向最左侧的为左指针,指向右侧的为右指针,从两头向中间遍历
 [LeetCode 救生艇问题](https://leetcode-cn.com/problems/boats-to-save-people/)
+#### 15. 三数之和
+<<< @/docs/computer/code/algorithm/threeSum.ts
 
-## 2. 链表
+### 二分查找
+#### 4.寻找两个正序数组的中位数
+<<< @/docs/computer/code/algorithm/findMedianSortedArrays.ts
+
+### 差分数组
+#### 370. 区间加法
+
+
+## 2. 栈&队列
+> 这里说的栈是数据结构中的栈, 是一种先进后出的数据结构, 队列相反是一种先进先出的数据结构
+
+优点
+::: tip
+能够快速访问最新的数据
+:::
+
+缺点
+::: warning
+访问非最新数据时,要从最新数据开始获取
+:::
+
+### 基础栈
+<<< @/docs/computer/code/algorithm/Stack.ts
+
+### 最值栈
+<<< @/docs/computer/code/algorithm/minStack.ts
+
+### 单调栈(递增栈)
+<<< @/docs/computer/code/algorithm/ProseStack.ts
+
+### 优先队列
+入栈和普通队列一致, 出栈的时候按照某种优先级(最大或者最小)出栈
+
+### 相关算法题
+#### 20. 判断有效的括号
+<<< @/docs/computer/code/algorithm/isValidBrackets.ts
+#### 232. 用栈实现队列
+<<< @/docs/computer/code/algorithm/isValidBrackets.ts
+
+## 3. 堆
+1. 堆是一种特殊的完全二叉树
+2. 根节点一定是最大(maxHeap)或者最小(minHeap)
+3. 所有父节点必然小于等于子节点(minHeap小顶堆)或者所有父节点大于等于子节点(maxHeap)
+4. 同龄节点没有必然的关系
+
+<<< @/docs/computer/code/algorithm/heap.ts
+
+### 相关算法题
+#### 703. 数据流中第K大元素
+<<< @/docs/computer/code/algorithm/kthLargest.ts
+#### 239. 滑动窗口最大值
+<<< @/docs/computer/code/algorithm/maxSlidingWindow.ts
+
+## 4. 链表
 > 链表是一连串非线性顺序的数据结构,每一个节点都保存着相邻节点的内存地址
 
 优点
@@ -48,27 +134,13 @@ categories:
 ### 循环链表(此处展示双向循环列表)
 <<< @/docs/computer/code/algorithm/CycleLinkedList.ts
 
-## 3. 栈
-> 这里说的栈是数据结构中的栈, 是一种先进后出的数据结构
-
-优点
-::: tip
-能够快速访问最新的数据
-:::
-
-缺点
-::: warning
-访问非最新数据时,要从最新数据开始获取
-:::
-
-### 基础栈
-<<< @/docs/computer/code/algorithm/Stack.ts
-
-### 最值栈
-<<< @/docs/computer/code/algorithm/MinStack.ts
-
-### 单调栈(递增栈)
-<<< @/docs/computer/code/algorithm/ProseStack.ts
+### 相关算法题
+#### 反转链表
+<<< @/docs/computer/code/algorithm/reverseLink.ts
+#### 24.两两交换链表中的节点
+<<< @/docs/computer/code/algorithm/swapPairs.ts
+### 141.判断是否有环形链表
+<<< @/docs/computer/code/algorithm/hasCycle.ts
 
 ## 4. 集合
 > 集合是由一堆无序的、相关联的，且不重复的元素组成的组合
@@ -92,7 +164,7 @@ categories:
 ### 子集
 <<< @/docs/computer/code/algorithm/IsChild.ts
 
-## 5. 哈希hash表
+## 5. 哈希hash&hashMap&hashSet
 > 哈希表是一种根据关键字直接访问对应内存地址数据的一种数据结构, 而建立关键字和对应的数据的这种关系的函数就是hash函数
 
 优点
@@ -224,7 +296,7 @@ cond(yes)->process1->e2
 
 ### 二叉树
 > 子节点最多有两个的一种树结构
-#### 1. 二叉查找树
+#### 二叉查找树
 1. 左节点不为空时,则该节点的大小 __小于或者等于__ 父节点
 2. 右节点不为空时,则该节点的大小 __大于或者等于__ 父节点
 
@@ -233,7 +305,7 @@ cond(yes)->process1->e2
 - 中序遍历: 左子树->根节点->右子树
 - 后序遍历: 左子树->右子树->根节点
 - 前驱节点: 小于当前节点的最大子节点
-- 后继节点: 大于当前界定啊的最小子节点
+- 后继节点: 大于当前节点的最小子节点
 
 优点
 ::: tip
@@ -245,10 +317,17 @@ cond(yes)->process1->e2
 当数据分布不均匀的时候,整体的树形会变的线性化
 :::
 
-
-
-
 <<< @/docs/computer/code/algorithm/BinaryTree.ts
+#### 二叉树遍历
+<<< @/docs/computer/code/algorithm/traverseBinaryTree.ts
+#### 236.二叉树的公共祖先
+<<< @/docs/computer/code/algorithm/lowestCommonAncestor.ts
+#### 102.二叉树的层序遍历
+<<< @/docs/computer/code/algorithm/levelOrder.ts
+#### 111.二叉树的最小深度
+<<< @/docs/computer/code/algorithm/minDepth.ts
+#### 124.二叉树中的最大路径和
+<<< @/docs/computer/code/algorithm/maxPathSum.ts
 
 ### 2-3-4树
 > 一种多节点的搜索树(多叉树),用于解决二叉树的线性化分布
@@ -334,6 +413,19 @@ cond(yes)->process1->e2
 5. 从任一节点(包括根节点)到其每个叶子的所有路径都包含相同数目的黑色节点。__(2-3-4树的根节点深度相同,且2-3-4树的节点必定有一个黑色节点)__
 
 
+## 8. 迭代&分治
+### Pow
+<<< @/docs/computer/code/algorithm/pow.ts
 
+## 9. 贪心
+### 122. 买卖股票的最佳时机
+<<< @/docs/computer/code/algorithm/maxProfit.ts
 
-## 7. 动态规划
+## 10. 动态规划
+### 22. 括号生成
+<<< @/docs/computer/code/algorithm/generateParenthesis.ts 
+### 51. N皇后
+<<< @/docs/computer/code/algorithm/solveNQueens.ts
+### 36. 有效数独
+<<< @/docs/computer/code/algorithm/isValidSudoku.ts
+

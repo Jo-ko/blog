@@ -8,6 +8,13 @@ module.exports = {
     'plugins': [
         'flowchart',
         '@vuepress-reco/extract-code',
+        [
+            "md-enhance",
+            {
+                tex: true,
+            },
+        ],
+
     ],
     "head": [
         [
@@ -70,6 +77,10 @@ module.exports = {
                         "text": "框架原理",
                         "items": [
                             {
+                                "text": "React",
+                                "link": "/docs/framework/react/"
+                            },
+                            {
                                 "text": "React16",
                                 "link": "/docs/framework/react16/"
                             },
@@ -94,6 +105,14 @@ module.exports = {
                     {
                         "text": "前沿技术",
                         "link": "/docs/future/"
+                    },
+                    {
+                        "text": "数学基础",
+                        "link": "/docs/math/"
+                    },
+                    {
+                        "text": "原创文章",
+                        "link": "/docs/article/"
                     }
                 ]
             },
@@ -128,7 +147,8 @@ module.exports = {
                 "request",
                 "cache",
                 "struct",
-                "workThread"
+                "workThread",
+                "http"
             ],
             "/docs/js/": [
                 ["", "简述"],
@@ -145,7 +165,8 @@ module.exports = {
                 "event",
                 "canvas",
                 "form",
-                "customEle"
+                "customEle",
+                "custom"
             ],
             "/docs/native/": [
                 ["", "简述"],
@@ -156,6 +177,13 @@ module.exports = {
             ],
             "/docs/backEnd/": [
                 ["", "简述"]
+            ],
+            "/docs/framework/react/": [
+                ["", "简述"],
+                "react_hooks",
+                "react_batchUpdate",
+                "react_fiber",
+                "react_transaction",
             ],
             "/docs/framework/react16/": [
                 ["", "简述"],
@@ -170,7 +198,9 @@ module.exports = {
                 ["", "简述"],
                 "webpack_v1",
                 "webpack_v4",
-                "webpack_tapable"
+                "webpack_tapable",
+                "webpack_HMR",
+                "webpack_plugins"
             ],
             "/docs/libs/": [
                 ["", "简述"],
@@ -187,6 +217,14 @@ module.exports = {
             ],
             "/docs/future/": [
                 ["", "简述"]
+            ],
+            "/docs/math/": [
+                ["", "简述"],
+                "linearAlgebra",
+            ],
+            "/docs/article/": [
+                ["", "简述"],
+                "mini-router"
             ]
         },
         "type": "blog",

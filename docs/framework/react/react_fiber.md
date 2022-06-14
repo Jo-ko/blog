@@ -1,4 +1,11 @@
-# Fiber
+---
+title: React-Fiber
+date: 2021-04-29
+tags:
+- 框架基础
+categories:
+- 前端知识
+---
 
 ## 什么是Fiber
 > React中的Fiber表示的是用于替换原有Stack更新模型的一种将 __IO密集型操作碎片化__ 的模型

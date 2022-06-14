@@ -228,7 +228,7 @@ export function updateContainer(
         parentComponent: ?React$Component<any, any>, // null
         callback: ?Function, // ReactWork包装后的callback
 ): ExpirationTime {
-   // 获取FiberRoot
+   // 获取RootFiber
    const current = container.current;
    // currentTime是用来计算过期时间(过期时间是对currentTime加权得到的)
    // 目的是在同一事件中发生的所有优先级相同的更新都收到相同的到期时间

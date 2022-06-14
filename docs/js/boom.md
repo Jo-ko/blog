@@ -20,7 +20,7 @@ dpr为2时,表示1个逻辑像素等于4个物理像素(2的2次方)
 
 ### viewport
 - layout viewport(布局视口): 通常是一个较大的宽度,保证pc上的网页也能显示
-  - document.documentElement.clientWidth或者document.document.clientHeight
+  - document.documentElement.clientWidth或者document.documentElement.clientHeight
 - visual viewport(视觉视口): 当前设备可视区域,用户缩放会导致变化
   - window.innerWidth
 - ideal viewport(理想视口): 与分辨率无关的可视区域,可以看成屏幕尺寸

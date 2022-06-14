@@ -17,27 +17,31 @@ categories:
 
 ## React基础使用
 ### 代码分割
+
 ```jsx
 // import 分割
 import("@/path/to/module").then(result => {
-    result.method();
+   result.method();
 })
 
 // 组件懒加载
-import React, { Suspense } from 'react';
+import React, {Suspense} from 'docs/framework/react/README';
+
 const lazyComponent = React.lazy(() => import('./components'));
 const fallComponent = <div>hello word</div>;
-    
+
 const myComponent = () => (
-    <Suspense fallback={fallComponent} f>
-        <lazyComponent />
-    </Suspense>
+        <Suspense fallback={fallComponent} f>
+           <lazyComponent/>
+        </Suspense>
 )
 ```
 ### Context
+
 ```jsx
 // 创建
-import React from 'react';
+import React from 'docs/framework/react/README';
+
 const context = React.createContext(defaultValue);
 // 分享器调用
 <context.Provider value={value}></context.Provider>

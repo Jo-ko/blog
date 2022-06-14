@@ -58,10 +58,10 @@ define('moduleA', ['require', 'exports'], function (require, exports) {
 ;(function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD
-        define(['jquery', 'underscore'], factory);
+        define(['jquery', 'debounce'], factory);
     } else if (typeof module === 'object' && module.exports) {
         // CMD
-        module.exports = factory(require('jquery'), require('underscore'))
+        module.exports = factory(require('jquery'), require('debounce'))
     } else {
         root.returnExports = factory(root.$, root._);
     }

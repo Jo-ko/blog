@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>polygon</title>
+    <style>
+        canvas {
+            width: 512px;
+            height: 512px;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="512" height="512"></canvas>
+</body>
+<script type="module">
+    import Vector2D from "./Vector2D.mjs";
+
+    const canvas = document.querySelectorAll('canvas')[0];
+    const ctx = canvas.getContext('2d');
+    ctx.translate(canvas.width * 0.5, canvas.height * 0.5);
+    ctx.scale(1, -1);
+
+    function regularShape(edges = 3, x, y, step) {
+        const ret = [];
+        const delta = Math.PI * (1 - (edges - 2) / edges); // 多边形内角计算方式
+        let p = new Vector2D(x, y);
+        const dir = new Vector2D(step, 0);
+        ret.push(p);
+        for (let i = 0; i < edges; i++) {
+            p = p.copy().add(dir.rotate(delta));
+            ret.push(p);
+        }
+        return ret;
+    }
+
+
+    function draw(points, strokeStyle = 'black', fillStyle = null) {
+        ctx.strokeStyle = strokeStyle;
+        ctx.beginPath();
+        ctx.moveTo(...points[0]);
+        console.log(points);
+        for (let i = 1; i < points.length; i++) {
+            ctx.lineTo(...points[i]);
+        }
+        ctx.closePath();
+
+        if (fillStyle) {
+            ctx.fillStyle = fillStyle;
+            ctx.fill();
+        }
+
+        ctx.stroke();
+    }
+
+
+    draw(regularShape(3, 128, 128, 100));  // 绘制三角形
+    draw(regularShape(6, -64, 128, 50));  // 绘制六边形
+    draw(regularShape(11, -64, -64, 30));  // 绘制十一边形
+    draw(regularShape(60, 128, -64, 6));  // 绘制六十边形
+
+</script>
+</html>

@@ -14,9 +14,9 @@ categories:
 实例与其构造函数的原型的关系链
 
 ## 对象&构造器&原型
-1. 对象都是由构造器创建的,构造器与原型通过prototype连接,原型通过constructor属性和构造器相连, 而对象通过__proto__与构造器的原型连接来找到公有属性和方法
+1. 普通对象都是由构造器创建的,构造器与原型通过prototype连接,原型通过constructor属性和普通对象构造器相连, 而对象通过__proto__与构造器的原型连接来找到公有属性和方法
 2. 构造器是一种特殊对象,它的构造函数就是Function,所以构造器的prototype属性是构造器Name.prototype, 而__proto__属性指向Function.prototype
-3. 原型也是对象,它的构造函数就是Object,所以原型的 __proto__属性指向的是Object.prototype
+3. 原型本身也是一种对象,它的构造函数就是Object,所以原型的 __proto__属性指向的是Object.prototype
 4. Object.prototype的原型是null
 
 <img :src="$withBase('/js/prototype.png')" alt="prototype" width="500vw"/>

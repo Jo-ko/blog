@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <button class="btn">show</button>
+</body>
+<script>
+    const imgSrc = 'https://img.souche.com/f2e/d0106a507ebda57671f09675070fa1c2.png';
+    const btn = document.querySelector('.btn');
+    const body = document.querySelector('body');
+    // const img = document.querySelector('.img');
+    var preloadImg = new Image();
+    preloadImg.src = imgSrc;
+
+    // Promise.resolve().then(() => {
+    //     preloadImg = null;
+    // })
+
+    // Promise.resolve().then(() => {
+    //     const img = document.createElement('img');
+    //     img.setAttribute('src', imgSrc);
+    //     body.appendChild(img);
+    // })
+
+    btn.addEventListener('click', function () {
+        const img = document.createElement('img');
+        img.setAttribute('src', imgSrc);
+        body.appendChild(img);
+        preloadImg = null;
+    })
+</script>
+</html>

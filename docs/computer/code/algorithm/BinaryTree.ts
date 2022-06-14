@@ -3,7 +3,7 @@ const enum Side {
     right
 }
 
-class TreeNode<T> {
+export class TreeNode<T> {
     value: T = null;
     leftNode: TreeNode<T> | null = null;
     rightNode: TreeNode<T> | null = null;
@@ -14,7 +14,7 @@ class TreeNode<T> {
     }
 }
 
-class BinaryTree<T> {
+export class BinaryTree<T> {
     root: TreeNode<T>
     // 查找
     public find(key: T): TreeNode<T> | null {

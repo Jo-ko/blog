@@ -18,6 +18,7 @@ categories:
 #### 如何产生微任务
 1. MutationObserver
 2. Promise
+3. queueMicrotask
 
 #### 微任务的执行过程
 1. 在全局执行上下文环境中创建微任务队列

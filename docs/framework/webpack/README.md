@@ -23,10 +23,10 @@ title: Webpack通用知识点
 ### module & chunk & bundle
 1. module 表示我们书写各个模块
 2. chunk 表示webpack处理各个模块依赖的关系网络
-3. bundle 表示实际输出用于加载的文件,bundle包含多个chunk
+3. bundle 表示实际输出用于加载的文件,bundle包含多个chunk,因为尽管有些chunk中的文件是有依赖关系的,但是并不能放在一起,比如css和js
 
 ## hash & chunkhash & contenthash三者的区别
-> 三个属性都是用于控制文件的持久化缓存
+> 三个属性都是用于控制文件的持久化缓存, 称之为文件指纹标识
 
 ::: tip hash
 跟项目的文件结构有关, 当有文件修改时, hash就会改变, 并且所有文件对应的hash都是一样的
@@ -34,17 +34,20 @@ title: Webpack通用知识点
 
 ::: tip chunkhash
 根据不同的入口文件(Entry)进行依赖文件解析、构建对应的 chunk，生成对应的哈希值,也就是说同一个chunk体系下的的hash是一样的
-1. 同一个chunk体系下的文件,修改其中一个文件,其他文件的chunkhash也会发生变化,比如我们通过MiniCssExtractPlugin将css抽离
+1. 同一个chunk体系下的文件,修改其中一个文件,其他文件的chunkhash也会发生变化,比如我们通过MiniCssExtractPlugin将css抽离,并且单独设置其文件指纹类型为contentHash
 2. 观察打包后的stats,如果chunks为数值,表示模块标识是通过自增id的方式,就算不是同一个chunk体系下的文件,修改其中也会导致其他的发生变化
    1. 可以通过引入 HashedModuleIdsPlugin插件/optimization.chunkIds 解决
    2. 也可以通过引入 NamedChunksPlugin和NamedModulesPlugin两个插件修改模块标识的方式(develop模式下自动注入)
-3. chunkhash和HotModuleReplacementPlugin有冲突
+3. chunkhash和HotModuleReplacementPlugin有冲突,因此无法在HMR模式下使用
 :::
 
 ::: tip contenthash
 1. 跟文件的内容有关,文件的内容不变,hash值不变,因此能很好的解决chunkhash带来的问题
 2. contenthash在webpack4 之前都只能在css上使用，并不能在js上使用，并且现在也只是在production环境上才能使用
 3. contenthash会增加构建的时间
+:::
+
+::: tip 为什么在HMR中无法使用chunkHash和contentHash文件签名
 :::
 
 ## filename & chunkFilename

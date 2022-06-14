@@ -419,5 +419,7 @@ ws.onerror = function(event) {
 }
 ```
 
+## 服务端推送技术
+### Comet技术
 
 [comment]: <> (https://segmentfault.com/a/1190000004322487)
